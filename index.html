@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<title>Fractals</title>
+    <meta name="author" content="Alex Berke | aberke">
+
+    <!-- <meta name="description" content=""> TODO   -->
+    <meta name="author" content="Alex Berke | aberke">
+    <link rel="shortcut icon" href="img/sierpinski-triangle.png" type="image/x-icon">
+    <meta property="og:image" content="img/sierpinski-triangle.png" />
+
+    <script type="text/javascript" src="js/raphael/raphael.js"></script>
+    <script type="text/javascript" src="js/shapes.js"></script>
+    <script type="text/javascript" src="js/util.js"></script>
+</head>
+<body>
+
+
+<div id='canvas' class='canvas' style='border: 1px solid black;'></div>
+
+<script>
+
+// 60 degrees in radians
+const RADIANS_60_DEGREES = (2*Math.PI)/6;
+
+// Make a square canvas
+const CANVAS_SIZE = Math.min(window.innerWidth, 800); // px
+
+var paper = new Raphael('canvas', CANVAS_SIZE, CANVAS_SIZE);
+
+
+var startCenterPoint = {X: CANVAS_SIZE/2, Y: CANVAS_SIZE/2};
+
+var sideLength = CANVAS_SIZE/2;
+
+var sierpinskiArrowheadCurvePathList = getSierpinskiArrowheadCurve(6, startCenterPoint, sideLength);
+draw(paper, sierpinskiArrowheadCurvePathList);
+
+var sierpinskiTrianglePathList = getSierpinskiTriangle(4, startCenterPoint, sideLength);
+draw(paper, sierpinskiTrianglePathList);
+
+
+</script>
+
+</body>
