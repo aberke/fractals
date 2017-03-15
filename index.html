@@ -15,29 +15,32 @@
 </head>
 <body>
 
+<h2>Sierpiński Triangle</h2>
+<div id='canvas-1' class='canvas'></div>
 
-<div id='canvas' class='canvas' style='border: 1px solid black;'></div>
+<h2>Sierpiński Arrowhead Curve</h2>
+<hr/>
+<div id='canvas-2' class='canvas'></div>
 
 <script>
 
-// 60 degrees in radians
-const RADIANS_60_DEGREES = (2*Math.PI)/6;
+'use strict';
 
-// Make a square canvas
-const CANVAS_SIZE = Math.min(window.innerWidth, 800); // px
+// how many drawings in a row
+const FRACTAL_ROW_COUNT = 5;
 
-var paper = new Raphael('canvas', CANVAS_SIZE, CANVAS_SIZE);
+const CANVAS_HEIGHT = 400; // deal with mobile case later
+
+var paper1 = new Raphael('canvas-1', '100%', CANVAS_HEIGHT);
+var paper2 = new Raphael('canvas-2', '100%', CANVAS_HEIGHT);
 
 
-var startCenterPoint = {X: CANVAS_SIZE/2, Y: CANVAS_SIZE/2};
+let maxOrder = 6;
+let baseFractalFunction = getSierpinskiTriangle;
+let sierpinskiTriangleFractals = drawFractalRow(paper1, FRACTAL_ROW_COUNT, maxOrder, getSierpinskiTriangle, baseFractalFunction);
 
-var sideLength = CANVAS_SIZE/2;
-
-var sierpinskiArrowheadCurvePathList = getSierpinskiArrowheadCurve(6, startCenterPoint, sideLength);
-draw(paper, sierpinskiArrowheadCurvePathList);
-
-var sierpinskiTrianglePathList = getSierpinskiTriangle(4, startCenterPoint, sideLength);
-draw(paper, sierpinskiTrianglePathList);
+// draw the arrow head curves
+let sierpinskiArrowheadCurveFractals = drawFractalRow(paper2, FRACTAL_ROW_COUNT, 4, getSierpinskiArrowheadCurve, baseFractalFunction);
 
 
 </script>
