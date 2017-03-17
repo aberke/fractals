@@ -10,8 +10,11 @@
     <meta property="og:image" content="img/sierpinski-triangle.png" />
 
     <script type="text/javascript" src="js/raphael/raphael.js"></script>
-    <script type="text/javascript" src="js/shapes.js"></script>
+    
     <script type="text/javascript" src="js/util.js"></script>
+    <script type="text/javascript" src="js/pythagoras-tree.js"></script>
+    <script type="text/javascript" src="js/sierpinski-triangle.js"></script>
+    <script type="text/javascript" src="js/sierpinski-arrowhead-curve.js"></script>
 </head>
 <body>
 
@@ -33,124 +36,13 @@
 
 var paper3 = new Raphael('canvas-3', '100%', 600);
 
-
-/*
-Draws square by taking centerPoint and starting at "bottom left" corner where "bottom left"
-subject to orientation.
-Returns pathList
-*/
-function pythagorasTreeSquare(centerPoint, orientation, sideLength) {
-	// compute the points as if square was oriented up and then rotate them
-	const diagonal = sideLength*Math.sqrt(2);
-
-	let bottomLeftPoint = {
-		X: centerPoint.X - (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
-		Y: centerPoint.Y + (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
-	};
-	let bottomRightPoint = {
-		X: centerPoint.X + (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
-		Y: centerPoint.Y + (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
-	};
-	let topLeftPoint = {
-		X: centerPoint.X - (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
-		Y: centerPoint.Y - (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
-	};
-	let topRightPoint = {
-		X: centerPoint.X + (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
-		Y: centerPoint.Y - (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
-	};
-	bottomLeftPoint = rotatePoint(bottomLeftPoint, orientation, centerPoint);
-	bottomRightPoint = rotatePoint(bottomRightPoint, orientation, centerPoint);
-	topRightPoint = rotatePoint(topRightPoint, orientation, centerPoint);
-	topLeftPoint = rotatePoint(topLeftPoint, orientation, centerPoint);
-
-	return [
-		["M", centerPoint.X, centerPoint.Y],
-		["M", bottomLeftPoint.X, bottomLeftPoint.Y],
-		["L", bottomRightPoint.X, bottomRightPoint.Y],
-		["L", topRightPoint.X, topRightPoint.Y],
-		["L", topLeftPoint.X, topLeftPoint.Y],
-		["L", bottomLeftPoint.X, bottomLeftPoint.Y]
-	];
-}
-
-
-function pythagorasTreeRoutine(order, pathList, centerPoint, orientation, sideLength) {
-	if (order <= 0) {
-		return;
-	}
-
-	// add shape around this centerPoint
-	let shapePathList = pythagorasTreeSquare(centerPoint, orientation, sideLength);
-	for (var i=0; i<shapePathList.length; i++) {
-		pathList.push(shapePathList[i]);
-	}
-
-	// scale down sideLength by factor of (1/2)*sqrt(2)
-	let childSideLength = (1/2)*Math.sqrt(2)*sideLength;
-
-	let leftChildOrientation = orientation - RADIANS_45_DEGREES;
-	let rightChildOrientation = orientation + RADIANS_45_DEGREES;
-
-	// TODO: figure out how to do this the right way
-	// without this multiplier the fractals do not perfectly line up and touch
-	let tightener = 0.96;
-
-	let leftChildCenterPoint = {
-		X: centerPoint.X + (
-			(1/2)*(tightener)*sideLength*Math.cos(orientation)
-			+
-			(3/4)*(tightener)*sideLength*Math.cos(leftChildOrientation)
-		),
-		Y: centerPoint.Y + (
-			(1/2)*(tightener)*sideLength*Math.sin(orientation)
-			+
-			(3/4)*tightener*sideLength*Math.sin(leftChildOrientation)
-		)
-	}
-	let rightChildCenterPoint = {
-		X: centerPoint.X + (
-			(1/2)*tightener*sideLength*Math.cos(orientation)
-			+
-			(3/4)*tightener*sideLength*Math.cos(rightChildOrientation)
-		),
-		Y: centerPoint.Y + (
-			(1/2)*tightener*sideLength*Math.sin(orientation)
-			+
-			(3/4)*tightener*sideLength*Math.sin(rightChildOrientation)
-		)
-	}
-
-	pythagorasTreeRoutine(order - 1, pathList, leftChildCenterPoint, leftChildOrientation, childSideLength);
-	pythagorasTreeRoutine(order - 1, pathList, rightChildCenterPoint, rightChildOrientation, childSideLength);
-
-	return pathList;
-}
-
 var pythagorasTreePathList = [];
 var centerPoint = {X: 300, Y: 100};
 var orientation = 2*RADIANS_45_DEGREES;
 var sideLength = 100;
 var pythagorasTreePathlist = pythagorasTreeRoutine(6, pythagorasTreePathList, centerPoint, orientation, sideLength);
 
-
-function drawBranchedPathList(paper, pathList, start, end, jump, interval) {
-	if (start + jump > end) return;
-
-	let nextPart = pathList.slice(start, start + jump);
-	// animates out from first point
-	var animatePoint = paper.path(nextPart[0]);
-	animatePoint.animate({path: nextPart}, interval, function() {
-		let nextIndex1 = start + jump;
-		let nextIndex2 = Math.floor(start + end)/2;
-		nextIndex2 += (nextIndex2 % jump);
-
-		drawBranchedPathList(paper, pathList, nextIndex1, nextIndex2, jump, interval);
-		drawBranchedPathList(paper, pathList, nextIndex2, end, jump, interval);
-	});
-}
-
-drawBranchedPathList(paper3, pythagorasTreePathList, 0, pythagorasTreePathList.length, 6, 1000);
+drawPythagorasTree(paper3, pythagorasTreePathList, 1000);
 
 
 // how many drawings in a row
