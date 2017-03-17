@@ -1,16 +1,15 @@
 'use strict';
 
+// Constants:
 
 const MAGENTA = '#330033';
 
-// 60 degrees in radians
+// Representing 'degrees' in radians (I think in degrees :( )
 const RADIANS_60_DEGREES = (2*Math.PI)/6;
-
-// 45 degrees in radians
 const RADIANS_45_DEGREES = (2*Math.PI)/8;
-
 const RADIANS_90_DEGREES = 2*RADIANS_60_DEGREES;
 const RADIANS_180_DEGREES = 3*RADIANS_60_DEGREES;
+const RADIANS_360_DEGREES = 2*Math.PI
 
 
 /*
@@ -141,7 +140,7 @@ Returns next point
 @returns (dict) {X: Number, Y: Number}
 **/
 function getNextPoint(fromPoint, distance, angle) {
-	if (!(angle < 360 && angle > -360)) {
+	if (angle > RADIANS_360_DEGREES || angle < (-1)*RADIANS_360_DEGREES) {
 		console.error('getNextPoint called with bad angle', angle);
 		return;
 	}
