@@ -110,39 +110,53 @@ function pythagorasTreeSquare(centerPoint, orientation, sideLength) {
 	];
 }
 
+
+var DrawPythagorasTreeLevel = 0;
 /*
-Given the paper & path, draws the path on the paper where segments
-corresponding to same order draws at same time.
-Recursively calls drawing function on each segment's children
+Draws path of tree on paper, level by level, with animation.
+Recursively calls drawing function on each segment's children.
 */
-function drawPythagorasTree(paper, pathList, animationInterval) {
-	// set default animation interval
+function drawPythagorasTree(paper, pathList, animationInterval, drawCallback) {
+	// Set default animation interval
 	animationInterval = animationInterval || 1000; // unit: ms
+
+	// Set default drawCallback to do nothing
+	drawCallback = drawCallback || function(order) {};
+
 	// Initialize the start and end values to look at entire pathList
 	let start = 0;
 	let end = pythagorasTreePathList.length;
 	// There are this many path pieces that compose a square of the tree
 	// These pieces should be drawn together
 	let jump = 6;
-	drawBranchedPathList(paper, pathList, start, end, jump, animationInterval);
+	// Initially, draw blocks at order=1
+	let initialLevel = 1;
+	drawBranchedPathList(paper, pathList, start, end, jump, animationInterval, drawCallback, initialLevel);
 }
 
 /*
 Draws current 'square' and then for that square, recursively draws its 2 children
 */
-function drawBranchedPathList(paper, pathList, start, end, jump, interval) {
-	// check base case: there is nothing more to draw in this segment of the list
+function drawBranchedPathList(paper, pathList, start, end, jump, interval, drawCallback, level) {
+	// Check base case: there are no more blocks to draw in this segment of the list
 	if (start + jump > end) return;
+
+	// announce we are drawing something at this order/level!
+	drawCallback(level);
 
 	let nextPart = pathList.slice(start, start + jump);
 	// animates out from first point
 	var animatePoint = paper.path(nextPart[0]);
 	animatePoint.animate({path: nextPart}, interval, function() {
+		// done drawing own block
+		// recursively call to draw 2 child blocks at next level
+
+		// compute indices of child blocks in the pathList
 		let nextIndex1 = start + jump;
 		let nextIndex2 = Math.floor(start + end)/2;
 		nextIndex2 += (nextIndex2 % jump);
 
-		drawBranchedPathList(paper, pathList, nextIndex1, nextIndex2, jump, interval);
-		drawBranchedPathList(paper, pathList, nextIndex2, end, jump, interval);
+		drawBranchedPathList(paper, pathList, nextIndex1, nextIndex2, jump, interval, drawCallback, level + 1);
+		drawBranchedPathList(paper, pathList, nextIndex2, end, jump, interval, drawCallback, level + 1);
 	});
 }
