@@ -6,6 +6,39 @@ const MAGENTA = '#330033';
 // 60 degrees in radians
 const RADIANS_60_DEGREES = (2*Math.PI)/6;
 
+// 45 degrees in radians
+const RADIANS_45_DEGREES = (2*Math.PI)/8;
+
+const RADIANS_90_DEGREES = 2*RADIANS_60_DEGREES;
+const RADIANS_180_DEGREES = 3*RADIANS_60_DEGREES;
+
+
+/*
+Linear Algebra: Rotate point around center by angle
+Rotation matrix:
+	|cosθ, −sinθ|
+	|sinθ,  cosθ|
+Returns {X: number, Y: number} new point
+*/
+function rotatePoint(point, angle, center) {
+	center = center || {X: 0, Y: 0};
+	// translate point before rotating
+	let translatedPoint = {
+		X: point.X - center.X,
+		Y: point.Y - center.Y
+	}
+	// rotate
+	let rotatedPoint = {
+		X: translatedPoint.X*Math.cos(angle) - translatedPoint.Y*Math.sin(angle),
+		Y: translatedPoint.X*Math.sin(angle) + translatedPoint.Y*Math.cos(angle)
+	}
+	// translate it back
+	return {
+		X: rotatedPoint.X + center.X,
+		Y: rotatedPoint.Y + center.Y
+	}
+}
+
 
 function drawFractalRow(paper, fractalCount, maxOrder, fractalFunction, baseFractalFunction) {
 
@@ -97,7 +130,6 @@ Returns height of triangle.
 function getTriangleHeight(angle, hypotenuseLength) {
 	return hypotenuseLength*(Math.sin(angle));
 }
-
 
 
 /*
