@@ -1,19 +1,19 @@
 # Fractals
-Fractals
+
+Fractals drawn using Raphael JS.
+
+* Sierpinski Triangle
+* Sierpinski Arrowhead Curve
+* Pythagoras Tree
+
+- TODO: link
 
 
 
+TODO:
 
-To do:
-
-- draw outlines in magenta with bolder stroke
-- make base a lighter gray
-- better font
 - better styling
 - include description + link to code below fractal row
-- interactive ideas:
-	- redraw row on click?
-	- allow user to set order?
 
 - deal with mobile
 

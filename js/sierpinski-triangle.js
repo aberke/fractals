@@ -1,6 +1,12 @@
 'use strict';
-
 /*************************************
+Generates a Sierpinski Triangle as a Raphael JS path.
+
+Contains code to draw in both recursive (depth first)
+and iterative (breadth first) fashions.
+
+Author: Alex Berke (aberke)
+
 Has dependencies in util.js
 *************************************/
 
@@ -33,23 +39,103 @@ function getSierpinskiTriangle(startCenterPoint, sideLength, order, orientation)
 	let pathList = getEquilateralTrianglePathList(startPoint, sideLength, (-1)*orientation);
 
 	// Draw inner triangles starting at passed in startCenterPoint
-	let innerTrianglesPathList = sierpinskiTriangleRoutine(startCenterPoint, sideLength/2, order, orientation);
+	let innerTrianglesPathList = iterativeSierpinskiTriangleRoutine(startCenterPoint, sideLength/2, order, orientation);
 	pathList = pathList.concat(innerTrianglesPathList);
 
 	return pathList;
 }
 
+
 /*
-Recursive subroutine that creates the Sierpinski Triangle
+Iterative subroutine that creates the Sierpinski Triangle.
 Each triangle has 3 triangles with half its side length left, right, and either
-above or below (depending or orientation)
+above or below (depending or orientation).
+Pattern generated in breadth first fashion.
 
 @param {X: Number, Y: Number} centerPoint point from which to draw triangle
 @param {number} sideLength
 @param {number} order or depth of recursion with which to continue
 @param {number} orientation where +1 => triangle points down, -1 => triangle points up
+
+@returns {array} pathlist
 */
-function sierpinskiTriangleRoutine(centerPoint, sideLength, order, orientation) {
+function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, order, orientation) {
+	let pathList = []; // list of points and path commands returned
+
+	// the triangleQueue holds the next triangles to draw in a queue
+	let triangleQueue = [];
+	// it starts off with one item -- the center (level 1) triangle to draw
+	triangleQueue.push({
+		centerPoint: centerPoint,
+		sideLength: sideLength
+	});
+
+	while (triangleQueue.length < 3**order) {
+
+		// pop next triangle to draw off the queue
+		let nextTriangle = triangleQueue.shift();
+		let centerPoint = nextTriangle.centerPoint;
+		let sideLength = nextTriangle.sideLength;
+
+		// draw next triangle
+		var height = getTriangleHeight(RADIANS_60_DEGREES, sideLength);
+		// draw the triangle with center = centerPoint, sideLength = sideLength
+		var startPoint = {
+			X: centerPoint.X - (1/2)*sideLength,
+			Y: centerPoint.Y - orientation*(1/2)*height,
+		}
+		let trianglePathList = getEquilateralTrianglePathList(startPoint, sideLength, orientation);
+		pathList = pathList.concat(trianglePathList);
+
+		// put its 3 child triangles on the triangleQueue:
+		// handle left
+		var leftCenterPoint = {
+			X: centerPoint.X - (1/2)*sideLength,
+			Y: centerPoint.Y + orientation*(1/4)*height,
+		}
+		triangleQueue.push({
+			centerPoint: leftCenterPoint,
+			sideLength: sideLength/2
+		});
+
+		// handle right -- recursively call routine for smaller right triangle
+		var rightCenterPoint = {
+			X: centerPoint.X + (1/2)*sideLength,
+			Y: centerPoint.Y + orientation*(1/4)*height,
+		}
+		triangleQueue.push({
+			centerPoint: rightCenterPoint,
+			sideLength: sideLength/2
+		});
+
+		// handle vertical -- recursively call routine for smaller top triangle
+		var verticalCenterPoint = {
+			X: centerPoint.X,
+			Y: centerPoint.Y - orientation*(3/4)*height,
+		}
+		triangleQueue.push({
+			centerPoint: verticalCenterPoint,
+			sideLength: sideLength/2
+		});
+	}
+	return pathList;
+}
+
+
+/*
+Recursive subroutine that creates the Sierpinski Triangle.
+Each triangle has 3 triangles with half its side length left, right, and either
+above or below (depending or orientation).
+Pattern generated in depth first fashion.
+
+@param {X: Number, Y: Number} centerPoint point from which to draw triangle
+@param {number} sideLength
+@param {number} order or depth of recursion with which to continue
+@param {number} orientation where +1 => triangle points down, -1 => triangle points up
+
+@returns {array} PathList
+*/
+function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, order, orientation) {
 	if (order <= 0)
 		return [];
 
@@ -67,7 +153,7 @@ function sierpinskiTriangleRoutine(centerPoint, sideLength, order, orientation) 
 		X: centerPoint.X - (1/2)*sideLength,
 		Y: centerPoint.Y + orientation*(1/4)*height,
 	}
-	var leftPathList = sierpinskiTriangleRoutine(leftCenterPoint, sideLength/2, order - 1, orientation);
+	var leftPathList = recursiveSierpinskiTriangleRoutine(leftCenterPoint, sideLength/2, order - 1, orientation);
 	pathList = pathList.concat(leftPathList);
 
 	// handle right -- recursively call routine for smaller right triangle
@@ -75,7 +161,7 @@ function sierpinskiTriangleRoutine(centerPoint, sideLength, order, orientation) 
 		X: centerPoint.X + (1/2)*sideLength,
 		Y: centerPoint.Y + orientation*(1/4)*height,
 	}
-	var rightPathList = sierpinskiTriangleRoutine(rightCenterPoint, sideLength/2, order - 1, orientation);
+	var rightPathList = recursiveSierpinskiTriangleRoutine(rightCenterPoint, sideLength/2, order - 1, orientation);
 	pathList = pathList.concat(rightPathList);
 
 	// handle vertical -- recursively call routine for smaller top triangle
@@ -83,11 +169,12 @@ function sierpinskiTriangleRoutine(centerPoint, sideLength, order, orientation) 
 		X: centerPoint.X,
 		Y: centerPoint.Y - orientation*(3/4)*height,
 	}
-	var verticalPathList = sierpinskiTriangleRoutine(verticalCenterPoint, sideLength/2, order - 1, orientation);
+	var verticalPathList = recursiveSierpinskiTriangleRoutine(verticalCenterPoint, sideLength/2, order - 1, orientation);
 	pathList = pathList.concat(verticalPathList);
 
 	return pathList;
 }
+
 
 /**
 Creates the path for an equilateral triangle oriented either up or down.
@@ -101,7 +188,7 @@ Creates the path for an equilateral triangle oriented either up or down.
 function getEquilateralTrianglePathList(startPoint, sideLength, orientation) {
 	orientation = orientation || 1;
 	let pathList = [
-		["M", startPoint.X, startPoint.Y]
+		['M', startPoint.X, startPoint.Y]
 	];
 	let angle = 0;
 	let point = startPoint;
