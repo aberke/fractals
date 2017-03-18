@@ -19,10 +19,29 @@
 <body>
 
 <h2>Pythagoras Tree</h2>
-<div id="canvas-3" class="canvas" style="border: 1px solid blue;"></div>
-<!-- Update the 'Order' number as the tree grows in animation -->
-<p>Order: <span id="pythagoras-tree-order"></span></p>
-<button id="pythagoras-tree-redraw">Redraw</button>
+<div id="canvas-3" class="canvas" style="border: 1px solid blue;">
+	<!-- Update the 'Order' number as the tree grows in animation -->
+	<p>Order: <span class="order-text"></span></p>
+	<button class="redraw-btn">Redraw</button>
+</div>
+
+<div id="canvas-4" class="canvas" style="border: 1px solid blue;">
+	<!-- Update the 'Order' number as the tree grows in animation -->
+	<p>Order: <span class="order-text"></span></p>
+	<button class="redraw-btn">Redraw</button>
+</div>
+
+<div id="canvas-5" class="canvas" style="border: 1px solid blue;">
+	<!-- Update the 'Order' number as the tree grows in animation -->
+	<p>Order: <span class="order-text"></span></p>
+	<button class="redraw-btn">Redraw</button>
+</div>
+
+<div id="canvas-6" class="canvas" style="border: 1px solid blue;">
+	<!-- Update the 'Order' number as the tree grows in animation -->
+	<p>Order: <span class="order-text"></span></p>
+	<button class="redraw-btn">Redraw</button>
+</div>
 
 <h2>Sierpiński Triangle</h2>
 <div id="canvas-1" class="canvas"></div>
@@ -33,36 +52,47 @@
 
 
 <script>
-
 "use strict";
 
 
-var paper3 = new Raphael("canvas-3", "100%", 400);
+function handlePythagoreasCanvas(containerId, edgePathFunction) {
+	let containerElt = document.getElementById(containerId);
+	let orderTextElt = containerElt.getElementsByClassName("order-text")[0];
+	let redrawButtonElt = containerElt.getElementsByClassName("redraw-btn")[0];
 
-var pythagorasTreePathList = [];
-var centerPoint = {X: 300, Y: 100};
-var orientation = 2*RADIANS_45_DEGREES;
-var sideLength = 100;
-var pythagorasTreePathlist = pythagorasTreeRoutine(6, pythagorasTreePathList, centerPoint, orientation, sideLength);
+	var paper = new Raphael(containerElt, "100%", 400);
 
-// Update inner text of this element as the order/level being drawn grows
-var pythagorasTreeOrderTextElt = document.getElementById("pythagoras-tree-order");
-var currentDrawOrder = 0;
-function drawPythagorasTreeCallback(order) {
-	if (currentDrawOrder < order) {
-		currentDrawOrder = order;
-		pythagorasTreeOrderTextElt.innerText = String(order);
+	var pythagorasTreePathList = [];
+	var centerPoint = {X: 300, Y: 350};
+	var orientation = (-2)*RADIANS_45_DEGREES;
+	var sideLength = 100;
+	var pythagorasTreePathlist = pythagorasTreeRoutine(6, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunction);
+
+	// Update inner text of this element as the order/level being drawn grows
+	var currentDrawOrder = 0;
+	function drawPythagorasTreeCallback(order) {
+		if (currentDrawOrder < order) {
+			currentDrawOrder = order;
+			orderTextElt.innerText = String(order);
+		}
 	}
+	// set up button for redrawing
+	function redrawPythagorasTree() {
+		paper.clear();
+		drawPythagorasTree(paper, pythagorasTreePathList, 1000, drawPythagorasTreeCallback);
+	}
+	redrawButtonElt.onclick = redrawPythagorasTree;
+	// draw the tree for the first time
+	redrawPythagorasTree();
 }
-// set up button for redrawing
-function redrawPythagorasTree() {
-	paper3.clear();
-	drawPythagorasTree(paper3, pythagorasTreePathList, 1000, drawPythagorasTreeCallback);
-}
-var pythagorasTreeRedrawButton = document.getElementById("pythagoras-tree-redraw");
-pythagorasTreeRedrawButton.onclick = redrawPythagorasTree;
-// draw the tree for the first time
-redrawPythagorasTree();
+
+handlePythagoreasCanvas("canvas-3");
+handlePythagoreasCanvas("canvas-4", getEllipsePath);
+handlePythagoreasCanvas("canvas-5", getCurvedPath);
+let multiplier = Math.random();
+handlePythagoreasCanvas("canvas-6", function(fromPoint, toPoint, centerPoint) {
+	return getCatmullRomPath(fromPoint, toPoint, centerPoint, multiplier);
+});
 
 
 // how many drawings in a row
