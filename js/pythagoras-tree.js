@@ -184,11 +184,11 @@ function drawPythagorasTree(paper, pathList, animationInterval, drawCallback) {
 /*
 Draws current 'square' and then for that square, recursively draws its 2 children
 */
-function drawBranchedPathList(paper, pathList, start, end, jump, interval, drawCallback, level) {
+function drawBranchedPathList(paper, pathList, start, end, jump, animationInterval, drawCallback, level) {
 	// Check base case: there are no more blocks to draw in this segment of the list
 	if (start + jump > end) return;
 
-	// announce we are drawing something at this level/level!
+	// announce we are drawing something at this level
 	drawCallback(level);
 
 	let nextPart = pathList.slice(start, start + jump);
@@ -196,7 +196,7 @@ function drawBranchedPathList(paper, pathList, start, end, jump, interval, drawC
 	var animatePoint = paper.path(nextPart[0]);
 	// color the path purple
 	animatePoint.attr({'stroke': PURPLE, 'stroke-width': 2});
-	animatePoint.animate({path: nextPart}, interval, function() {
+	animatePoint.animate({path: nextPart}, animationInterval, function() {
 		// done drawing own block
 		// recursively call to draw 2 child blocks at next level
 
@@ -205,7 +205,7 @@ function drawBranchedPathList(paper, pathList, start, end, jump, interval, drawC
 		let nextIndex2 = Math.floor(start + end)/2;
 		nextIndex2 += (nextIndex2 % jump);
 
-		drawBranchedPathList(paper, pathList, nextIndex1, nextIndex2, jump, interval, drawCallback, level + 1);
-		drawBranchedPathList(paper, pathList, nextIndex2, end, jump, interval, drawCallback, level + 1);
+		drawBranchedPathList(paper, pathList, nextIndex1, nextIndex2, jump, animationInterval, drawCallback, level + 1);
+		drawBranchedPathList(paper, pathList, nextIndex2, end, jump, animationInterval, drawCallback, level + 1);
 	});
 }

@@ -2,23 +2,21 @@
 
 Fractals drawn using Raphael JS.
 
-* Sierpinski Triangle
-* Sierpinski Arrowhead Curve
-* Pythagoras Tree
-
-- TODO: link
+* [Sierpinski Triangle](https://github.com/aberke/fractals/blob/master/js/sierpinski-triangle.js)
+* [Sierpinski Arrowhead Curve](https://github.com/aberke/fractals/blob/master/js/sierpinski-arrowhead-curve.js)
+* [Pythagoras Tree](https://github.com/aberke/fractals/blob/master/js/pythagoras-tree.js)
 
 
+## Can I add some more fractals?
 
-TODO:
+* Yes - Pull requests welcome!
 
-- better styling
-- include description + link to code below fractal row
+
+
+
+###### TODO:
 
 - deal with mobile
-
-
-- once you're proud, put a nice footer on there
 
 - make this a submodule of coloring-book
 - link to coloring book
