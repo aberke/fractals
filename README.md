@@ -18,12 +18,3 @@ Fractals drawn using Raphael JS.
 ### Why?
 
 I love fractals.  I also love math and am working on a coloring book that teaches its audience <a target="_blank" href="https://en.wikipedia.org/wiki/Group_theory">group theory</a>, and needed to draw some fractals in javascript.  It was harder than I thought, and led down a rabbit hole that seemed worthy of a webpage.  I wanted to be able to share the javascript code I wrote so that others did not later have the same troubles as I.
-
-
-
-###### TODO:
-
-- deal with mobile
-
-- make this a submodule of coloring-book
-- link to coloring book
