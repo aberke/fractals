@@ -141,13 +141,13 @@ const TRIANGLE_CANVAS_HEIGHT = 300; // deal with mobile case later
 var paper1 = new Raphael("canvas-1", "100%", TRIANGLE_CANVAS_HEIGHT);
 var paper2 = new Raphael("canvas-2", "100%", TRIANGLE_CANVAS_HEIGHT);
 
-let maxOrder = 6;
+let maxLevel = 6;
 let baseFractalFunction = getSierpinskiTriangle;
 
 // draw the Sierpinski Triangle with a 'redraw button'
 var redrawSierpinskiTriangleFractals = function() {
 	paper1.clear();
-	let sierpinskiTriangleFractals = drawFractalRow(paper1, TRIANGLE_ROW_COUNT, maxOrder, getSierpinskiTriangle, baseFractalFunction);
+	let sierpinskiTriangleFractals = drawFractalRow(paper1, TRIANGLE_ROW_COUNT, maxLevel, getSierpinskiTriangle, baseFractalFunction);
 }
 var redrawSierpinskiTriangleFractalsButton = document.getElementById("sierpinski-triangle-redraw-btn");
 redrawSierpinskiTriangleFractalsButton.onclick = redrawSierpinskiTriangleFractals;
@@ -167,33 +167,33 @@ redrawSierpinskiArrowheadCurveFractals();
 
 // draw one Pythagoras Tree
 function handlePythagorasCanvas(containerElt, edgePathFunction) {
-	let orderTextElt = containerElt.getElementsByClassName("level-text")[0];
+	let levelTextElt = containerElt.getElementsByClassName("level-text")[0];
 	let redrawButtonElt = containerElt.getElementsByClassName("redraw-btn")[0];
 
 	var paper = new Raphael(containerElt, "100%", 400);
 	let canvasWidth = paper.canvas.clientWidth;
 	let canvasHeight = paper.canvas.clientHeight;
 
-	let maxOrder = 7;
-	let sideLength = (5/3)*Math.min(canvasWidth, canvasHeight)/maxOrder;
+	let maxLevel = 7;
+	let sideLength = (5/3)*Math.min(canvasWidth, canvasHeight)/maxLevel;
 
 	var pythagorasTreePathList = [];
 	var centerPoint = {X: canvasWidth/2, Y: canvasHeight - (1/2)*sideLength};
 	var orientation = (-1)*RADIANS_90_DEGREES;
-	pythagorasTreeRoutine(maxOrder, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunction);
+	pythagorasTreeRoutine(maxLevel, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunction);
 
-	// Update inner text of this element as the order/level being drawn grows
-	let currentDrawOrder = 0;
-	function drawPythagorasTreeCallback(order) {
-		if (currentDrawOrder < order) {
-			currentDrawOrder = order;
-			orderTextElt.innerText = String(currentDrawOrder);
+	// Update inner text of this element as the level/level being drawn grows
+	let currentDrawLevel = 0;
+	function drawPythagorasTreeCallback(level) {
+		if (currentDrawLevel < level) {
+			currentDrawLevel = level;
+			levelTextElt.innerText = String(currentDrawLevel);
 		}
 	}
 	// set up button for redrawing
 	function redrawPythagorasTree() {
 		paper.clear();
-		currentDrawOrder = 0;
+		currentDrawLevel = 0;
 		drawPythagorasTree(paper, pythagorasTreePathList, 1000, drawPythagorasTreeCallback);
 	}
 	redrawButtonElt.onclick = redrawPythagorasTree;
@@ -207,8 +207,8 @@ handlePythagorasCanvas(containerElt3);
 
 // Draw a row of Pythagoras Trees
 function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
-	// draw trees of this order
-	let maxOrder = 7;
+	// draw trees of this level
+	let maxlevel = 7;
 
 	let paperWidth = paper.canvas.clientWidth;
 	let paperHeight = paper.canvas.clientHeight;
@@ -227,13 +227,13 @@ function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
 		var centerPoint = {X: centerPointX, Y: centerPointY};
 
 		var orientation = (-1)*RADIANS_90_DEGREES;
-		pythagorasTreeRoutine(maxOrder, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunctions[i]);
+		pythagorasTreeRoutine(maxlevel, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunctions[i]);
 		drawPythagorasTree(paper, pythagorasTreePathList, 1000, drawCallback);
 	}
 }
 
 let containerElt4 = document.getElementById("canvas-4");
-let orderTextElt4 = containerElt4.getElementsByClassName("level-text")[0];
+let levelTextElt4 = containerElt4.getElementsByClassName("level-text")[0];
 let redrawButtonElt4 = containerElt4.getElementsByClassName("redraw-btn")[0];
 
 var paper4 = new Raphael(containerElt4, "100%", 250);
@@ -246,12 +246,12 @@ function redrawPythagorasTreeMultiple() {
 	};
 	let edgePathFunctions = [getEllipsePath, getCurvedPath, randomEdgePathFunction];
 
-	// update order text element as the order increments	
-	let currentDrawOrder = 0;
-	function drawPythagorasTreeCallback(order) {
-		if (currentDrawOrder < order) {
-			currentDrawOrder = order;
-			orderTextElt4.innerText = String(currentDrawOrder);
+	// update level text element as the level increments	
+	let currentDrawLevel = 0;
+	function drawPythagorasTreeCallback(level) {
+		if (currentDrawLevel < level) {
+			currentDrawLevel = level;
+			levelTextElt4.innerText = String(currentDrawLevel);
 		}
 	}
 	drawPythagorasTreeMultiple(paper4, edgePathFunctions, drawPythagorasTreeCallback);

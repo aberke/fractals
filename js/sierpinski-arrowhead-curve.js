@@ -22,12 +22,12 @@ Here, F means “draw forward”, + means “turn left 60°”, and − means �
 
 @param {X: Number, Y: Number} centerPoint
 @param {number} sideLength
-@param {number} order (Integer) depth of recursion with which to draw
+@param {number} level (Integer) depth of recursion with which to draw
 @param {number} orientation where +1 => triangle points down, -1 => triangle points up
 
 @returns {array} pathList
 */
-function getSierpinskiArrowheadCurve(centerPoint, sideLength, order, orientation) {
+function getSierpinskiArrowheadCurve(centerPoint, sideLength, level, orientation) {
 	// Set default orientation.  -1 => point downwards, +1 => point upwards
 	if (!(orientation == -1 || orientation == 1))
 		orientation = 1;
@@ -47,11 +47,11 @@ function getSierpinskiArrowheadCurve(centerPoint, sideLength, order, orientation
 
 	// orient Sierpiński arrowhead curve
 	let angle = 0;
-	if ((order % 2) == 0) { // order is even
-		arrowheadCurve(order, pathList, startPoint, sideLength, angle, 1, orientation);
-	} else { // order is odd
+	if ((level % 2) == 0) { // level is even
+		arrowheadCurve(level, pathList, startPoint, sideLength, angle, 1, orientation);
+	} else { // level is odd
 		angle -= RADIANS_60_DEGREES;
-		arrowheadCurve(order, pathList, startPoint, sideLength, angle, 1, orientation);
+		arrowheadCurve(level, pathList, startPoint, sideLength, angle, 1, orientation);
 	}
 	return pathList;
 }
@@ -60,7 +60,7 @@ function getSierpinskiArrowheadCurve(centerPoint, sideLength, order, orientation
 /*
 Recursive subroutine to construct the Sierpiński arrowhead curve
 
-@param {number} order or depth of recursion with which to continue
+@param {number} level or depth of recursion with which to continue
 @param {array} pathList
 @param {X: Number, Y: Number} fromPoint
 @param {number} sideLength length of current side
@@ -70,12 +70,12 @@ Recursive subroutine to construct the Sierpiński arrowhead curve
 
 @returns {angle: Number, point: Point} current point and angle in path
 */
-function arrowheadCurve(order, pathList, fromPoint, sideLength, angle, angleChange, orientation) {
+function arrowheadCurve(level, pathList, fromPoint, sideLength, angle, angleChange, orientation) {
 	// last is the most current point and angle in path
 	let last;
 
-	// at order 0: at bottom of recursion: draw next part of path
-	if (order == 0) {
+	// at level 0: at bottom of recursion: draw next part of path
+	if (level == 0) {
 		let nextPoint = getNextPoint(fromPoint, sideLength, (orientation)*angle);
 		// appends to pathList
 		pathList = addLine(pathList, nextPoint);
@@ -86,20 +86,20 @@ function arrowheadCurve(order, pathList, fromPoint, sideLength, angle, angleChan
 		return last;
 	}
 
-	last = arrowheadCurve(order - 1, pathList, fromPoint, sideLength/2, angle, (-1)*angleChange, orientation);
+	last = arrowheadCurve(level - 1, pathList, fromPoint, sideLength/2, angle, (-1)*angleChange, orientation);
 	fromPoint = last.point;
 	angle = last.angle;
 
 	// turn
 	angle += (angleChange*RADIANS_60_DEGREES);
 
-	last = arrowheadCurve(order - 1, pathList, fromPoint, sideLength/2, angle, angleChange, orientation);
+	last = arrowheadCurve(level - 1, pathList, fromPoint, sideLength/2, angle, angleChange, orientation);
 	fromPoint = last.point;
 	angle = last.angle;
 
 	// turn
 	angle += (angleChange*RADIANS_60_DEGREES);
 
-	last = arrowheadCurve(order - 1, pathList, fromPoint, sideLength/2, angle, (-1)*angleChange, orientation);
+	last = arrowheadCurve(level - 1, pathList, fromPoint, sideLength/2, angle, (-1)*angleChange, orientation);
 	return last;
 }
