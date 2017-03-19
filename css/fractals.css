@@ -53,6 +53,7 @@ p {
 
 .redraw-btn {
 	padding: 10px;
+	font-size: 1.1em;
 	font-weight: bold;
 	border-radius: 4px;
 	border: 1px dotted #670067;
@@ -60,6 +61,7 @@ p {
 	background-color: transparent;
 	margin-left: 40px;
 	float: left;
+	margin: 0 0 0 10px;
 }
 .redraw-btn:hover{
 	cursor: pointer;
@@ -96,4 +98,18 @@ footer{
 }
 footer p {
 	text-align: center;
+}
+
+/* Handle mobile */
+@media (max-width: 600px) {
+
+	section.fractal-section {
+		text-align: center;
+	}
+
+	.redraw-btn {
+		float: none;
+		margin: 10px 0 0 0;
+		color: blue;
+	}
 }
