@@ -70,7 +70,7 @@ function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, order, orie
 		sideLength: sideLength
 	});
 
-	while (triangleQueue.length < 3**order) {
+	while (triangleQueue.length < Math.pow(3, order)) {
 
 		// pop next triangle to draw off the queue
 		let nextTriangle = triangleQueue.shift();
