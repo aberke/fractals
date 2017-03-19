@@ -4,7 +4,6 @@ Generates a Sierpiński arrowhead curve as a Raphael JS path.
 
 Author: Alex Berke (aberke)
 
-
 Has dependencies in util.js
 *************************************/
 
