@@ -85,11 +85,13 @@ a.code-link {
 }
 .level-text-p {
 	text-align: center;
+	margin-bottom: 12px;
 }
 
 
 footer{
 	padding: 50px;
+	font-size: 12px;
 	text-align: center;
 	border-top: 5px double #670067;
 	max-width: 70%;
@@ -98,18 +100,4 @@ footer{
 }
 footer p {
 	text-align: center;
-}
-
-/* Handle mobile */
-@media (max-width: 600px) {
-
-	section.fractal-section {
-		text-align: center;
-	}
-
-	.redraw-btn {
-		float: none;
-		margin: 10px 0 0 0;
-		color: blue;
-	}
 }
