@@ -40,7 +40,7 @@ function rotatePoint(point, angle, center) {
 }
 
 
-function drawFractalRow(paper, fractalCount, maxOrder, fractalFunction, baseFractalFunction) {
+function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFractalFunction) {
 
 	// distance (px) between fractals and side of canvas
 	const buffer_size = 10;
@@ -48,9 +48,9 @@ function drawFractalRow(paper, fractalCount, maxOrder, fractalFunction, baseFrac
 	var canvasWidth = paper.canvas.clientWidth;
 	var canvasHeight = paper.canvas.clientHeight;
 
-	// draw a bunch of fractals in a row, with increasing order
-	let order = 1;
-	let orderIncrement = Math.round(maxOrder/fractalCount);
+	// draw a bunch of fractals in a row, with increasing level
+	let level = 1;
+	let levelIncrement = Math.round(maxLevel/fractalCount);
 
 	// var fractalSize = 300; // deal with mobile sizing later
 	var fractalSize = (canvasWidth - (2*buffer_size))/fractalCount;
@@ -62,24 +62,24 @@ function drawFractalRow(paper, fractalCount, maxOrder, fractalFunction, baseFrac
 	let orientation = 1;
 	for (var i=1; i<=fractalCount; i++) {
 
-		let base = baseFractalFunction(centerPoint, fractalSize, order, orientation);
-		fractals[order] = fractalFunction(centerPoint, fractalSize, order, orientation);
+		let base = baseFractalFunction(centerPoint, fractalSize, level, orientation);
+		fractals[level] = fractalFunction(centerPoint, fractalSize, level, orientation);
 		// draw base in lighter stroke color
 		let pathBelow = paper.path(base);
 		pathBelow.attr({'stroke': LIGHT_GRAY});
 		// draw with animation on top of base in darker stroke color
-		draw(paper, fractals[order]);
+		draw(paper, fractals[level]);
 
 		// Place text: '_ levels' above or below the fractal drawn
-		let levelsTextString = String(order) + ' levels';
+		let levelsTextString = String(level) + ' levels';
 		paper.text(centerPoint.X, centerPoint.Y + orientation*(fractalSize/4 + 5), levelsTextString);
 
 		// increment center point along x-axis
 		centerPoint.X += fractalSize;
 		// alternate orientation
 		orientation *= (-1);
-		// draw next fractal with a higher order
-		order += orderIncrement;
+		// draw next fractal with a higher level
+		level += levelIncrement;
 	}
 	return fractals;
 }
