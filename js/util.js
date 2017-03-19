@@ -2,13 +2,14 @@
 
 // Constants:
 
-const MAGENTA = '#330033';
+const LIGHT_GRAY = '#d3d3d3';
+const PURPLE = '#670067';
 
 // Representing 'degrees' in radians (I think in degrees :( )
-const RADIANS_60_DEGREES = (2*Math.PI)/6;
-const RADIANS_45_DEGREES = (2*Math.PI)/8;
-const RADIANS_90_DEGREES = 2*RADIANS_60_DEGREES;
-const RADIANS_180_DEGREES = 3*RADIANS_60_DEGREES;
+const RADIANS_45_DEGREES = Math.PI/4;
+const RADIANS_60_DEGREES = Math.PI/3;
+const RADIANS_90_DEGREES = Math.PI/2;
+const RADIANS_180_DEGREES = Math.PI;
 const RADIANS_360_DEGREES = 2*Math.PI
 
 
@@ -60,16 +61,18 @@ function drawFractalRow(paper, fractalCount, maxOrder, fractalFunction, baseFrac
 	}
 	let orientation = 1;
 	for (var i=1; i<=fractalCount; i++) {
-		// draw circle at center for debugging
-		// paper.circle(centerPoint.X, centerPoint.Y, 3);
 
 		let base = baseFractalFunction(centerPoint, fractalSize, order, orientation);
 		fractals[order] = fractalFunction(centerPoint, fractalSize, order, orientation);
 		// draw base in lighter stroke color
 		let pathBelow = paper.path(base);
-		pathBelow.attr({'stroke': 'gray'});
+		pathBelow.attr({'stroke': LIGHT_GRAY});
 		// draw with animation on top of base in darker stroke color
 		draw(paper, fractals[order]);
+
+		// Place text: '_ levels' above or below the fractal drawn
+		let levelsTextString = String(order) + ' levels';
+		paper.text(centerPoint.X, centerPoint.Y + orientation*(fractalSize/4 + 5), levelsTextString);
 
 		// increment center point along x-axis
 		centerPoint.X += fractalSize;
@@ -97,6 +100,7 @@ function draw(paper, pathList, interval) {
 	if (pathList.length <= 0) return;
 
 	let currentPath = paper.path(pathList[0]);
+	currentPath.attr({'stroke': PURPLE, 'stroke-width': 2});
 	drawNextPart(pathList, currentPath, 1, interval);
 	return currentPath;
 }

@@ -1,18 +1,26 @@
 'use strict';
+/***
+Used to draw Pythagoras Tree as a Raphael JS path.
+
+Author: Alex Berke (aberke)
+**/
+
 
 /**
 Creates path of pythagoras tree, square by square.
 Starts with base (largest) square and recursively calls for the creation of the
 current square's 2 child nodes (squares).
 
-@param {number} order or depth of recursion to continue with.  Counts down.
+@param {number} level or depth of recursion to continue with.  Counts down.
 @param {array} pathList representing path.  Appeneded to as each square drawn.
 @param {X: number, Y: number} centerPoint that block should be drawn around
 @param {number} orientation as angle in radians that square should "point" to
 @param {number} sideLength of square to draw
+
+@returns {array} RaphaelJS 
 **/
-function pythagorasTreeRoutine(order, pathList, centerPoint, orientation, sideLength, edgePathFunction) {
-	if (order <= 0)
+function pythagorasTreeRoutine(level, pathList, centerPoint, orientation, sideLength, edgePathFunction) {
+	if (level <= 0)
 		return;
 
 	// add shape around this centerPoint
@@ -61,11 +69,12 @@ function pythagorasTreeRoutine(order, pathList, centerPoint, orientation, sideLe
 		)
 	}
 
-	pythagorasTreeRoutine(order - 1, pathList, leftChildCenterPoint, leftChildOrientation, childSideLength, edgePathFunction);
-	pythagorasTreeRoutine(order - 1, pathList, rightChildCenterPoint, rightChildOrientation, childSideLength, edgePathFunction);
+	pythagorasTreeRoutine(level - 1, pathList, leftChildCenterPoint, leftChildOrientation, childSideLength, edgePathFunction);
+	pythagorasTreeRoutine(level - 1, pathList, rightChildCenterPoint, rightChildOrientation, childSideLength, edgePathFunction);
 
 	return pathList;
 }
+
 
 /*
 Draws square by taking centerPoint and starting at "bottom left" corner where
@@ -159,7 +168,7 @@ function drawPythagorasTree(paper, pathList, animationInterval, drawCallback) {
 	animationInterval = animationInterval || 1000; // unit: ms
 
 	// Set default drawCallback to do nothing
-	drawCallback = drawCallback || function(order) {};
+	drawCallback = drawCallback || function(level) {};
 
 	// Initialize the start and end values to look at entire pathList
 	let start = 0;
@@ -167,7 +176,7 @@ function drawPythagorasTree(paper, pathList, animationInterval, drawCallback) {
 	// There are this many path pieces that compose a square of the tree
 	// These pieces should be drawn together
 	let jump = 6;
-	// Initially, draw blocks at order=1
+	// Initially, draw blocks at level=1
 	let initialLevel = 1;
 	drawBranchedPathList(paper, pathList, start, end, jump, animationInterval, drawCallback, initialLevel);
 }
@@ -179,12 +188,14 @@ function drawBranchedPathList(paper, pathList, start, end, jump, interval, drawC
 	// Check base case: there are no more blocks to draw in this segment of the list
 	if (start + jump > end) return;
 
-	// announce we are drawing something at this order/level!
+	// announce we are drawing something at this level/level!
 	drawCallback(level);
 
 	let nextPart = pathList.slice(start, start + jump);
 	// animates out from first point
 	var animatePoint = paper.path(nextPart[0]);
+	// color the path purple
+	animatePoint.attr({'stroke': PURPLE, 'stroke-width': 2});
 	animatePoint.animate({path: nextPart}, interval, function() {
 		// done drawing own block
 		// recursively call to draw 2 child blocks at next level
