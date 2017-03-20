@@ -72,8 +72,11 @@ p {
 	font-weight: 600;
 }
 
-a.bold {
+a {
 	color: #670067;
+}
+
+a.bold {
 	text-decoration: none;
 }
 a.code-link {
