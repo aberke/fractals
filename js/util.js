@@ -45,8 +45,8 @@ function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFrac
 	// distance (px) between fractals and side of canvas
 	const buffer_size = 10;
 
-	var canvasWidth = paper.canvas.clientWidth;
-	var canvasHeight = paper.canvas.clientHeight;
+	var canvasWidth = paper.getSize().width;
+	var canvasHeight = paper.getSize().height;
 
 	// draw a bunch of fractals in a row, with increasing level
 	let level = 1;
