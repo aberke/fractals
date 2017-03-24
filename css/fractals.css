@@ -91,6 +91,16 @@ a.code-link {
 	margin-bottom: 12px;
 }
 
+hr.dotted-line-break {
+	width: 95%;
+	max-width: 900px;
+	min-width: 400px;
+	margin: auto;
+	color: transparent;
+	border-style: dashed;
+	border-bottom: 3px dashed #d3d3d3;
+}
+
 
 footer{
 	padding: 50px;

@@ -11,6 +11,7 @@ Has dependencies in util.js
 *************************************/
 
 
+
 /**
 Creates path for a Sierpinski Triangle as list of points on a plane.
 
@@ -21,7 +22,7 @@ Creates path for a Sierpinski Triangle as list of points on a plane.
 
 @returns {array} pathList representing path as list of points on a plane.
 */
-function getSierpinskiTriangle(startCenterPoint, sideLength, level, orientation) {
+function getSierpinskiTriangle(centerPoint, sideLength, level, orientation, options) {
 	// Set default level.  level represents the depth of recursion
 	level = level || 3;
 
@@ -29,17 +30,26 @@ function getSierpinskiTriangle(startCenterPoint, sideLength, level, orientation)
 	if (!(orientation == -1 || orientation == 1))
 		orientation = 1;
 
+
+	options = options || {};
+	let innerTrianglesFunction = options.innerTrianglesFunction || iterativeSierpinskiTriangleRoutine;
+
 	// Draw outter most triangle (inverted by calling with inverted orientation)
 	// start at bottom left corner
-	var height = getTriangleHeight((2*Math.PI)/6, sideLength);
-	var startPoint = {
-		X: startCenterPoint.X - (1/2)*sideLength,
-		Y: startCenterPoint.Y + (orientation)*(1/4)*height,
+	let height = getTriangleHeight((2*Math.PI)/6, sideLength);
+	let startPoint = {
+		X: centerPoint.X - (1/2)*sideLength,
+		Y: centerPoint.Y + orientation*(1/2)*height,
 	}
 	let pathList = getEquilateralTrianglePathList(startPoint, sideLength, (-1)*orientation);
 
-	// Draw inner triangles starting at passed in startCenterPoint
-	let innerTrianglesPathList = iterativeSierpinskiTriangleRoutine(startCenterPoint, sideLength/2, level, orientation);
+	// Draw inner triangles with shifted centerPoint
+	let nextCenterPoint = {
+		X: centerPoint.X,
+		Y: centerPoint.Y + orientation*(1/4)*height,
+
+	}
+	let innerTrianglesPathList = innerTrianglesFunction(nextCenterPoint, sideLength/2, level, orientation, options);
 	pathList = pathList.concat(innerTrianglesPathList);
 
 	return pathList;
@@ -78,9 +88,9 @@ function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 		let sideLength = nextTriangle.sideLength;
 
 		// draw next triangle
-		var height = getTriangleHeight(RADIANS_60_DEGREES, sideLength);
+		let height = getTriangleHeight(RADIANS_60_DEGREES, sideLength);
 		// draw the triangle with center = centerPoint, sideLength = sideLength
-		var startPoint = {
+		let startPoint = {
 			X: centerPoint.X - (1/2)*sideLength,
 			Y: centerPoint.Y - orientation*(1/2)*height,
 		}
@@ -89,7 +99,7 @@ function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 
 		// put its 3 child triangles on the triangleQueue:
 		// handle left
-		var leftCenterPoint = {
+		let leftCenterPoint = {
 			X: centerPoint.X - (1/2)*sideLength,
 			Y: centerPoint.Y + orientation*(1/4)*height,
 		}
@@ -99,7 +109,7 @@ function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 		});
 
 		// handle right -- recursively call routine for smaller right triangle
-		var rightCenterPoint = {
+		let rightCenterPoint = {
 			X: centerPoint.X + (1/2)*sideLength,
 			Y: centerPoint.Y + orientation*(1/4)*height,
 		}
@@ -109,7 +119,7 @@ function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 		});
 
 		// handle vertical -- recursively call routine for smaller top triangle
-		var verticalCenterPoint = {
+		let verticalCenterPoint = {
 			X: centerPoint.X,
 			Y: centerPoint.Y - orientation*(3/4)*height,
 		}
@@ -135,41 +145,44 @@ Pattern generated in depth first fashion.
 
 @returns {array} PathList
 */
-function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, orientation) {
+function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, orientation, options) {
 	if (level <= 0)
 		return [];
 
-	var height = getTriangleHeight(RADIANS_60_DEGREES, sideLength);
+	options = options || {};
+	let levelChange = options.levelChange || {l: 1, r: 1, v: 1};
+
+	let height = getTriangleHeight(RADIANS_60_DEGREES, sideLength);
 
 	// draw the triangle with center = centerPoint, sideLength = sideLength
-	var startPoint = {
+	let startPoint = {
 		X: centerPoint.X - (1/2)*sideLength,
 		Y: centerPoint.Y - orientation*(1/2)*height,
 	}
 	let pathList = getEquilateralTrianglePathList(startPoint, sideLength, orientation);
 
 	// handle left -- recursively call routine for smaller left triangle
-	var leftCenterPoint = {
+	let leftCenterPoint = {
 		X: centerPoint.X - (1/2)*sideLength,
 		Y: centerPoint.Y + orientation*(1/4)*height,
 	}
-	var leftPathList = recursiveSierpinskiTriangleRoutine(leftCenterPoint, sideLength/2, level - 1, orientation);
+	let leftPathList = recursiveSierpinskiTriangleRoutine(leftCenterPoint, sideLength/2, level - levelChange.l, orientation, options);
 	pathList = pathList.concat(leftPathList);
 
 	// handle right -- recursively call routine for smaller right triangle
-	var rightCenterPoint = {
+	let rightCenterPoint = {
 		X: centerPoint.X + (1/2)*sideLength,
 		Y: centerPoint.Y + orientation*(1/4)*height,
 	}
-	var rightPathList = recursiveSierpinskiTriangleRoutine(rightCenterPoint, sideLength/2, level - 1, orientation);
+	let rightPathList = recursiveSierpinskiTriangleRoutine(rightCenterPoint, sideLength/2, level - levelChange.r, orientation, options);
 	pathList = pathList.concat(rightPathList);
 
 	// handle vertical -- recursively call routine for smaller top triangle
-	var verticalCenterPoint = {
+	let verticalCenterPoint = {
 		X: centerPoint.X,
 		Y: centerPoint.Y - orientation*(3/4)*height,
 	}
-	var verticalPathList = recursiveSierpinskiTriangleRoutine(verticalCenterPoint, sideLength/2, level - 1, orientation);
+	let verticalPathList = recursiveSierpinskiTriangleRoutine(verticalCenterPoint, sideLength/2, level - levelChange.v, orientation, options);
 	pathList = pathList.concat(verticalPathList);
 
 	return pathList;
@@ -193,7 +206,7 @@ function getEquilateralTrianglePathList(startPoint, sideLength, orientation) {
 	let angle = 0;
 	let point = startPoint;
 	const angleChangeRadians = (2*Math.PI)/3; // adding 120 degrees
-	for (var i=0; i<3; i++) {
+	for (let i=0; i<3; i++) {
 		point = getNextPoint(point, sideLength, angle);
 		pathList = addLine(pathList, point);
 		angle += (orientation*angleChangeRadians);
