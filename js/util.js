@@ -13,12 +13,24 @@ const RADIANS_180_DEGREES = Math.PI;
 const RADIANS_360_DEGREES = 2*Math.PI
 
 
+/**
+Returns center point of paper
+@returns {X: number, Y: number}
+*/
+function getCanvasCenterPoint(paper) {
+	return {
+		X: paper.getSize().width/2,
+		Y: paper.getSize().height/2,
+	};
+}
+
+
 /*
 Linear Algebra: Rotate point around center by angle
 Rotation matrix:
 	|cosθ, −sinθ|
 	|sinθ,  cosθ|
-Returns {X: number, Y: number} new point
+@returns {X: number, Y: number} new point
 */
 function rotatePoint(point, angle, center) {
 	center = center || {X: 0, Y: 0};
@@ -72,7 +84,7 @@ function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFrac
 
 		// Place text: '_ levels' above or below the fractal drawn
 		let levelsTextString = String(level) + ' levels';
-		paper.text(centerPoint.X, centerPoint.Y + orientation*(fractalSize/4 + 5), levelsTextString);
+		paper.text(centerPoint.X, centerPoint.Y + fractalSize/2 + 5, levelsTextString);
 
 		// increment center point along x-axis
 		centerPoint.X += fractalSize;

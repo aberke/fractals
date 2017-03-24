@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+	<title>Sierpi&#324;ski Triangle</title>
+
+	<meta charset="UTF-8">
+
+	<link rel="shortcut icon" href="img/sierpinski-triangle.png" type="image/x-icon">
+
+	<script type="text/javascript" src="js/raphael/raphael.js"></script>
+
+	<script type="text/javascript" src="js/util.js"></script>
+	<script type="text/javascript" src="js/sierpinski-triangle.js"></script>
+
+
+	<link rel="stylesheet" href="css/fractals.css">
+	<!-- Google fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,600,700,800" rel="stylesheet">
+
+</head>
+<body>
+
+<h1>The Sierpi&#324;ski Triangle</h1>
+
+<div id="canvas-1" class="canvas"></div>
+
+<hr class="dotted-line-break"/>
+
+<div id="canvas-2" class="canvas"></div>
+
+<hr class="dotted-line-break"/>
+
+<div id="canvas-3" class="canvas"></div>
+
+
+<script>
+"use strict";
+
+
+let paper1 = new Raphael("canvas-1", "%100", 600);
+let paper2 = new Raphael("canvas-2", "%100", 600);
+let paper3 = new Raphael("canvas-3", "%100", 600);
+
+
+// draw the rotated triangles on paper1
+
+let sideLength = Math.min(paper1.getSize().height/2);
+let height = getTriangleHeight((2*Math.PI)/6, sideLength);
+let level = 5;
+let orientation = 1;
+
+
+let paper1CenterPoint = getCanvasCenterPoint(paper1);
+let startCenterPoint1 = {
+	X: paper1CenterPoint.X + (1/2)*sideLength,
+	Y: paper1CenterPoint.Y - orientation*(1/2)*height,
+}
+let options1 = {
+	levelChange: {l: 2, r: 1, v: 1},
+	innerTrianglesFunction: recursiveSierpinskiTriangleRoutine
+}
+let trianglePathList1 = getSierpinskiTriangle(startCenterPoint1, sideLength, level, orientation, options1);
+
+function drawRotatedVersions(paper, rotationPoint, pathList, rotations) {
+	let path = paper.path(pathList).attr({stroke: PURPLE});
+	let rotationDegrees = 360/rotations;
+	for (var r=1; r<rotations; r++) {
+		let clonedPath = path.clone();
+		clonedPath.rotate(r*rotationDegrees, rotationPoint.X, rotationPoint.Y);
+	}
+}
+drawRotatedVersions(paper1, paper1CenterPoint, trianglePathList1, 3);
+
+
+// draw row of triangles on paper2
+let maxLevel = 6;
+let baseFractalFunction = getSierpinskiTriangle;
+let triangleRowCount = 6;
+let triangleRow = drawFractalRow(paper2, triangleRowCount, maxLevel, getSierpinskiTriangle, baseFractalFunction);
+
+// draw one very big triangle on paper3
+paper3.setSize(paper3.getSize().width, paper3.getSize().height*2);
+let sideLength3 = Math.min(paper3.getSize().height/2);
+let level3 = 8;
+
+let paper3CenterPoint = getCanvasCenterPoint(paper1);
+
+let trianglePathList3 = getSierpinskiTriangle(paper3CenterPoint, sideLength3, 8);
+let trianglePath3 = paper3.path(trianglePathList3).attr({stroke: PURPLE});
+
+</script>
+
+</body>

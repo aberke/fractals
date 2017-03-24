@@ -36,7 +36,7 @@ function getSierpinskiArrowheadCurve(centerPoint, sideLength, level, orientation
 	var height = getTriangleHeight((2*Math.PI)/6, sideLength);
 	var startPoint = {
 		X: centerPoint.X - (1/2)*sideLength,
-		Y: centerPoint.Y + (orientation)*(1/4)*height,
+		Y: centerPoint.Y + (orientation)*(1/2)*height,
 	}
 
 	// initialize pathList with only startPoint
