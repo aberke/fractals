@@ -74,8 +74,12 @@ function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFrac
 	let orientation = 1;
 	for (var i=1; i<=fractalCount; i++) {
 
-		let base = baseFractalFunction(centerPoint, fractalSize, level, orientation);
-		fractals[level] = fractalFunction(centerPoint, fractalSize, level, orientation);
+		let options = {
+			level: level,
+			orientation: orientation,
+		}
+		let base = baseFractalFunction(centerPoint, fractalSize, options);
+		fractals[level] = fractalFunction(centerPoint, fractalSize, options);
 		// draw base in lighter stroke color
 		let pathBelow = paper.path(base);
 		pathBelow.attr({'stroke': LIGHT_GRAY});

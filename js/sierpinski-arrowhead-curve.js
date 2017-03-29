@@ -22,19 +22,26 @@ Here, F means “draw forward”, + means “turn left 60°”, and − means �
 
 @param {X: Number, Y: Number} centerPoint
 @param {number} sideLength
-@param {number} level (Integer) depth of recursion with which to draw
-@param {number} orientation where +1 => triangle points down, -1 => triangle points up
+@param {Object} options:
+	{number} level or depth of recursion with which to continue
+	{number} orientation where +1 => triangle points down, -1 => triangle points up=
 
 @returns {array} pathList
 */
-function getSierpinskiArrowheadCurve(centerPoint, sideLength, level, orientation) {
-	// Set default orientation.  -1 => point downwards, +1 => point upwards
+function getSierpinskiArrowheadCurve(centerPoint, sideLength, options) {
+	options = options || {};
+
+	// Get or set default level.  level represents the depth of recursion
+	let level = options.level || 3;
+
+	// Get or set default orientation. -1 => point downwards, +1 => point upwards
+	let orientation = options.orientation;
 	if (!(orientation == -1 || orientation == 1))
 		orientation = 1;
 
 	// start at bottom left corner
-	var height = getTriangleHeight((2*Math.PI)/6, sideLength);
-	var startPoint = {
+	let height = getTriangleHeight((2*Math.PI)/6, sideLength);
+	let startPoint = {
 		X: centerPoint.X - (1/2)*sideLength,
 		Y: centerPoint.Y + (orientation)*(1/2)*height,
 	}

@@ -178,11 +178,12 @@ function handlePythagorasCanvas(containerElt, edgePathFunction) {
 
 	let maxLevel = 7;
 	let sideLength = (5/3)*Math.min(paperWidth, paperHeight)/maxLevel;
+	let centerPoint = {X: paperWidth/2, Y: paperHeight - (1/2)*sideLength};
 
-	var pythagorasTreePathList = [];
-	var centerPoint = {X: paperWidth/2, Y: paperHeight - (1/2)*sideLength};
-	var orientation = (-1)*RADIANS_90_DEGREES;
-	pythagorasTreeRoutine(maxLevel, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunction);
+	let pythagorasTreePathList = getPythagorasTree(centerPoint, sideLength, {
+		levels: maxLevel,
+		edgePathFunction: edgePathFunction,
+	});
 
 	// Update inner text of this element as the level/level being drawn grows
 	let currentDrawLevel = 0;
@@ -210,7 +211,7 @@ handlePythagorasCanvas(containerElt3);
 // Draw a row of Pythagoras Trees
 function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
 	// draw trees of this level
-	let maxlevel = 7;
+	let maxLevel = 7;
 
 	let paperWidth = paper.getSize().width;
 	let paperHeight = paper.getSize().height;
@@ -222,14 +223,15 @@ function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
 
 
 	for (var i=0; i < edgePathFunctions.length; i++) {
-		var pythagorasTreePathList = [];
 		var centerPointX = (1/2)*treeSize + i*treeSize;
 		var centerPointY = paperHeight - (1/2)*sideLength;
 
 		var centerPoint = {X: centerPointX, Y: centerPointY};
 
-		var orientation = (-1)*RADIANS_90_DEGREES;
-		pythagorasTreeRoutine(maxlevel, pythagorasTreePathList, centerPoint, orientation, sideLength, edgePathFunctions[i]);
+		let pythagorasTreePathList = getPythagorasTree(centerPoint, sideLength, {
+			levels: maxLevel,
+			edgePathFunction: edgePathFunctions[i],
+		});
 		drawPythagorasTree(paper, pythagorasTreePathList, 1000, drawCallback);
 	}
 }

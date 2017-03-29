@@ -56,10 +56,12 @@ let startCenterPoint1 = {
 	Y: paper1CenterPoint.Y - orientation*(1/2)*height,
 }
 let options1 = {
+	level: level,
+	orientation: orientation,
 	levelChange: {l: 2, r: 1, v: 1},
 	innerTrianglesFunction: recursiveSierpinskiTriangleRoutine
 }
-let trianglePathList1 = getSierpinskiTriangle(startCenterPoint1, sideLength, level, orientation, options1);
+let trianglePathList1 = getSierpinskiTriangle(startCenterPoint1, sideLength, options1);
 
 function drawRotatedVersions(paper, rotationPoint, pathList, rotations) {
 	let path = paper.path(pathList).attr({stroke: PURPLE});
@@ -81,11 +83,10 @@ let triangleRow = drawFractalRow(paper2, triangleRowCount, maxLevel, getSierpins
 // draw one very big triangle on paper3
 paper3.setSize(paper3.getSize().width, paper3.getSize().height*2);
 let sideLength3 = Math.min(paper3.getSize().height/2);
-let level3 = 8;
-
 let paper3CenterPoint = getCanvasCenterPoint(paper1);
-
-let trianglePathList3 = getSierpinskiTriangle(paper3CenterPoint, sideLength3, 8);
+let trianglePathList3 = getSierpinskiTriangle(paper3CenterPoint, sideLength3, {
+	level: 8,
+});
 let trianglePath3 = paper3.path(trianglePathList3).attr({stroke: PURPLE});
 
 </script>
