@@ -11,15 +11,40 @@ Creates path of pythagoras tree, square by square.
 Starts with base (largest) square and recursively calls for the creation of the
 current square's 2 child nodes (squares).
 
-@param {number} level or depth of recursion to continue with.  Counts down.
-@param {array} pathList representing path.  Appeneded to as each square drawn.
-@param {X: number, Y: number} centerPoint that block should be drawn around
-@param {number} orientation as angle in radians that square should "point" to
+@param {X: number, Y: number} origin center that block should be drawn around
 @param {number} sideLength of square to draw
+@param {Object} options:
+				{number} level or depth of recursion to continue with.  Counts down.
+				{number} orientation as angle in radians that square should "point" to
 
-@returns {array} RaphaelJS 
+@returns {array} pathList as array of RaphaelJS paths to draw
+*/
+function getPythagorasTree(origin, sideLength, options) {
+	let pathList = []; // what will be returned
+
+	options = options || {};
+	let levels = options.levels || 4;
+	let orientation = options.orientation || (-1)*RADIANS_90_DEGREES;
+	let edgePathFunction = options.edgePathFunction || getStraightPath;
+
+	pythagorasTreeRoutine(pathList, origin, sideLength, levels, orientation, edgePathFunction);
+	
+	return pathList;
+}
+
+/**
+Recursive call to create path of pythagoras tree, square by square.
+Starts with base (largest) square and recursively calls for the creation of the
+current square's 2 child nodes (squares).
+
+@param {array} pathList representing path.  Appended to as each square drawn.
+@param {X: number, Y: number} centerPoint that block should be drawn around
+@param {number} sideLength of square to draw
+@param {number} level or depth of recursion to continue with.  Counts down.
+@param {number} orientation as angle in radians that square should "point" to
+@param {function} edgePathFunction (optional) function with which to draw edges of squares
 **/
-function pythagorasTreeRoutine(level, pathList, centerPoint, orientation, sideLength, edgePathFunction) {
+function pythagorasTreeRoutine(pathList, centerPoint, sideLength, level, orientation, edgePathFunction) {
 	if (level <= 0)
 		return;
 
@@ -69,8 +94,8 @@ function pythagorasTreeRoutine(level, pathList, centerPoint, orientation, sideLe
 		)
 	}
 
-	pythagorasTreeRoutine(level - 1, pathList, leftChildCenterPoint, leftChildOrientation, childSideLength, edgePathFunction);
-	pythagorasTreeRoutine(level - 1, pathList, rightChildCenterPoint, rightChildOrientation, childSideLength, edgePathFunction);
+	pythagorasTreeRoutine(pathList, leftChildCenterPoint, childSideLength, level - 1, leftChildOrientation, edgePathFunction);
+	pythagorasTreeRoutine(pathList, rightChildCenterPoint, childSideLength, level - 1, rightChildOrientation, edgePathFunction);
 
 	return pathList;
 }
@@ -145,7 +170,7 @@ function getStraightPath(fromPoint, toPoint) {
 /* Function to draw each edge with a slightly different curve. */
 function getCatmullRomPathRandom(fromPoint, toPoint, centerPoint) {
 	let multiplier = Math.random();
-	return etCatmullRomPath(fromPoint, toPoint, centerPoint, multiplier);
+	return getCatmullRomPath(fromPoint, toPoint, centerPoint, multiplier);
 }
 
 /* Draws curved path to toPoint where center of curve is between fromPoint and centerPoint. */

@@ -15,23 +15,25 @@ Has dependencies in util.js
 /**
 Creates path for a Sierpinski Triangle as list of points on a plane.
 
-@param {X: Number, Y: Number} startCenterPoint from which to draw triangle
+@param {X: Number, Y: Number} centerPoint from which to draw triangle
 @param {number} sideLength of outter most triangle
 @param {number} level or depth of recursion with which to draw triangles
 @param {number} orientation where +1 => triangle points down, -1 => triangle points up
 
 @returns {array} pathList representing path as list of points on a plane.
 */
-function getSierpinskiTriangle(centerPoint, sideLength, level, orientation, options) {
-	// Set default level.  level represents the depth of recursion
-	level = level || 3;
+function getSierpinskiTriangle(centerPoint, sideLength, options) {
+	options = options || {};
 
-	// Set default orientation.  -1 => point downwards, +1 => point upwards
+	// Get or set default level.  level represents the depth of recursion
+	let level = options.level || 3;
+
+	// Get or set default orientation. -1 => point downwards, +1 => point upwards
+	let orientation = options.orientation;
 	if (!(orientation == -1 || orientation == 1))
 		orientation = 1;
 
 
-	options = options || {};
 	let innerTrianglesFunction = options.innerTrianglesFunction || iterativeSierpinskiTriangleRoutine;
 
 	// Draw outter most triangle (inverted by calling with inverted orientation)
@@ -49,7 +51,7 @@ function getSierpinskiTriangle(centerPoint, sideLength, level, orientation, opti
 		Y: centerPoint.Y + orientation*(1/4)*height,
 
 	}
-	let innerTrianglesPathList = innerTrianglesFunction(nextCenterPoint, sideLength/2, level, orientation, options);
+	let innerTrianglesPathList = innerTrianglesFunction(nextCenterPoint, sideLength/2, level, options);
 	pathList = pathList.concat(innerTrianglesPathList);
 
 	return pathList;
@@ -65,11 +67,19 @@ Pattern generated in breadth first fashion.
 @param {X: Number, Y: Number} centerPoint point from which to draw triangle
 @param {number} sideLength
 @param {number} level or depth of recursion with which to continue
-@param {number} orientation where +1 => triangle points down, -1 => triangle points up
+@param {Object} options:
+	{number} orientation where +1 => triangle points down, -1 => triangle points up
 
 @returns {array} pathlist
 */
-function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, level, orientation) {
+function iterativeSierpinskiTriangleRoutine(centerPoint, sideLength, level, options) {
+	options = options || {};
+
+	// Get or set default orientation. -1 => point downwards, +1 => point upwards
+	let orientation = options.orientation;
+	if (!(orientation == -1 || orientation == 1))
+		orientation = 1;
+
 	let pathList = []; // list of points and path commands returned
 
 	// the triangleQueue holds the next triangles to draw in a queue
@@ -141,11 +151,12 @@ Pattern generated in depth first fashion.
 @param {X: Number, Y: Number} centerPoint point from which to draw triangle
 @param {number} sideLength
 @param {number} level or depth of recursion with which to continue
-@param {number} orientation where +1 => triangle points down, -1 => triangle points up
+@param {Object} options:
+	{number} orientation where +1 => triangle points down, -1 => triangle points up
 
 @returns {array} PathList
 */
-function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, orientation, options) {
+function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, options) {
 	if (level <= 0)
 		return [];
 
@@ -166,7 +177,7 @@ function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 		X: centerPoint.X - (1/2)*sideLength,
 		Y: centerPoint.Y + orientation*(1/4)*height,
 	}
-	let leftPathList = recursiveSierpinskiTriangleRoutine(leftCenterPoint, sideLength/2, level - levelChange.l, orientation, options);
+	let leftPathList = recursiveSierpinskiTriangleRoutine(leftCenterPoint, sideLength/2, level - levelChange.l, options);
 	pathList = pathList.concat(leftPathList);
 
 	// handle right -- recursively call routine for smaller right triangle
@@ -174,7 +185,7 @@ function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 		X: centerPoint.X + (1/2)*sideLength,
 		Y: centerPoint.Y + orientation*(1/4)*height,
 	}
-	let rightPathList = recursiveSierpinskiTriangleRoutine(rightCenterPoint, sideLength/2, level - levelChange.r, orientation, options);
+	let rightPathList = recursiveSierpinskiTriangleRoutine(rightCenterPoint, sideLength/2, level - levelChange.r, options);
 	pathList = pathList.concat(rightPathList);
 
 	// handle vertical -- recursively call routine for smaller top triangle
@@ -182,7 +193,7 @@ function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, orie
 		X: centerPoint.X,
 		Y: centerPoint.Y - orientation*(3/4)*height,
 	}
-	let verticalPathList = recursiveSierpinskiTriangleRoutine(verticalCenterPoint, sideLength/2, level - levelChange.v, orientation, options);
+	let verticalPathList = recursiveSierpinskiTriangleRoutine(verticalCenterPoint, sideLength/2, level - levelChange.v, options);
 	pathList = pathList.concat(verticalPathList);
 
 	return pathList;
