@@ -11,6 +11,63 @@ Has dependencies in util.js
 *************************************/
 
 
+/**
+Creates rotated versions of Sierpinski Triangle that 'flower out'
+
+@param {object} paper to draw on
+@param {X: Number, Y: Number} centerPoint from which to draw triangle
+@param {number} size
+
+@return {array} paper.set() of the paths
+*/
+function drawSierpinskiTriangleFlower(paper, centerPoint, size, level) {
+	let sideLength = size/2;
+	let height = getTriangleHeight((2*Math.PI)/6, sideLength);
+	// initialize paper path set that will be returned
+	let pathSet = paper.set();
+
+	// draw 1 triangle first and then the others from rotating it
+	let startCenterPoint = {
+		X: centerPoint.X + (1/2)*sideLength,
+		Y: centerPoint.Y - (1/2)*height,
+	};
+	let options = {
+		level: level || 4,
+		orientation: 1,
+		levelChange: {l: 2, r: 1, v: 1},
+		innerTrianglesFunction: recursiveSierpinskiTriangleRoutine,
+	};
+	let pathList = getSierpinskiTriangle(startCenterPoint, sideLength, options);
+	let path = paper.path(pathList);
+	pathSet.push(path);
+	// rotate the path twice to generate the other triangles
+	let rotationDegrees = 120;
+	let rotations = 3;
+	for (var r=1; r<rotations; r++) {
+		let clonedPath = path.clone();
+		clonedPath.rotate(r*rotationDegrees, centerPoint.X, centerPoint.Y);
+		pathSet.push(clonedPath);
+	}
+
+	return pathSet;
+}
+
+
+/**
+Draws Sierpinski Triangle on paper
+
+@param {object} paper to draw on
+@param {X: Number, Y: Number} centerPoint from which to draw triangle
+@param {number} sideLength of outter most triangle
+@param {object} options
+
+@return {object} path drawn on paper
+**/
+function drawSierpinskiTriangle(paper, centerPoint, sideLength, options) {
+	let pathList = getSierpinskiTriangle(centerPoint, sideLength, options);
+	return paper.path(pathList);	
+}
+
 
 /**
 Creates path for a Sierpinski Triangle as list of points on a plane.
@@ -161,6 +218,7 @@ function recursiveSierpinskiTriangleRoutine(centerPoint, sideLength, level, opti
 		return [];
 
 	options = options || {};
+	let orientation = options.orientation || 1;
 	let levelChange = options.levelChange || {l: 1, r: 1, v: 1};
 
 	let height = getTriangleHeight(RADIANS_60_DEGREES, sideLength);
