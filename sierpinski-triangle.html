@@ -43,36 +43,8 @@ let paper3 = new Raphael("canvas-3", "%100", 600);
 
 
 // draw the rotated triangles on paper1
-
-let sideLength = Math.min(paper1.getSize().height/2);
-let height = getTriangleHeight((2*Math.PI)/6, sideLength);
-let level = 5;
-let orientation = 1;
-
-
 let paper1CenterPoint = getCanvasCenterPoint(paper1);
-let startCenterPoint1 = {
-	X: paper1CenterPoint.X + (1/2)*sideLength,
-	Y: paper1CenterPoint.Y - orientation*(1/2)*height,
-}
-let options1 = {
-	level: level,
-	orientation: orientation,
-	levelChange: {l: 2, r: 1, v: 1},
-	innerTrianglesFunction: recursiveSierpinskiTriangleRoutine
-}
-let trianglePathList1 = getSierpinskiTriangle(startCenterPoint1, sideLength, options1);
-
-function drawRotatedVersions(paper, rotationPoint, pathList, rotations) {
-	let path = paper.path(pathList).attr({stroke: PURPLE});
-	let rotationDegrees = 360/rotations;
-	for (var r=1; r<rotations; r++) {
-		let clonedPath = path.clone();
-		clonedPath.rotate(r*rotationDegrees, rotationPoint.X, rotationPoint.Y);
-	}
-}
-drawRotatedVersions(paper1, paper1CenterPoint, trianglePathList1, 3);
-
+drawSierpinskiTriangleFlower(paper1, paper1CenterPoint, paper1.getSize().height, 5).attr({stroke: PURPLE});
 
 // draw row of triangles on paper2
 let maxLevel = 6;
