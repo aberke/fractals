@@ -1,4 +1,5 @@
-'use strict';
+// 'use strict'; // commented out in prod to work nicely with safari
+// Note: cannot declare constants when using strict mode.
 
 // Constants:
 

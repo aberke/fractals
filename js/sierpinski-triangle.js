@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict'; // commented out in prod to work nicely with safari
 /*************************************
 Generates a Sierpinski Triangle as a Raphael JS path.
 

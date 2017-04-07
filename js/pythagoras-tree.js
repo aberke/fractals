@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict'; // commented out in prod to work nicely with safari
 /***
 Used to draw Pythagoras Tree as a Raphael JS path.
 
