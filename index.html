@@ -11,7 +11,9 @@
 	<link rel="shortcut icon" href="img/sierpinski-triangle.png" type="image/x-icon">
 	<meta property="og:image" content="https://aberke.github.io/fractals/img/pythagoras-tree-1.gif" />
 
-	<script type="text/javascript" src="js/raphael/raphael.js"></script>
+	<!-- vendor assets -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+	<!-- <script type="text/javascript" src="js/raphael/raphael.js"></script> -->
 
 	<script type="text/javascript" src="js/util.js"></script>
 	<script type="text/javascript" src="js/pythagoras-tree.js"></script>
@@ -130,7 +132,7 @@
 </footer>
 
 <script>
-"use strict";
+// 'use strict'; // commented out in prod to work nicely with safari
 
 
 // draw a row of triangles
