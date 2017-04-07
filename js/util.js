@@ -1,17 +1,17 @@
-// 'use strict'; // commented out in prod to work nicely with safari
+'use strict';
 // Note: cannot declare constants when using strict mode.
 
 // Constants:
 
-const LIGHT_GRAY = '#d3d3d3';
-const PURPLE = '#670067';
+var LIGHT_GRAY = '#d3d3d3';
+var PURPLE = '#670067';
 
 // Representing 'degrees' in radians (I think in degrees :( )
-const RADIANS_45_DEGREES = Math.PI/4;
-const RADIANS_60_DEGREES = Math.PI/3;
-const RADIANS_90_DEGREES = Math.PI/2;
-const RADIANS_180_DEGREES = Math.PI;
-const RADIANS_360_DEGREES = 2*Math.PI
+var RADIANS_45_DEGREES = Math.PI/4;
+var RADIANS_60_DEGREES = Math.PI/3;
+var RADIANS_90_DEGREES = Math.PI/2;
+var RADIANS_180_DEGREES = Math.PI;
+var RADIANS_360_DEGREES = 2*Math.PI
 
 
 /**
@@ -36,12 +36,12 @@ Rotation matrix:
 function rotatePoint(point, angle, center) {
 	center = center || {X: 0, Y: 0};
 	// translate point before rotating
-	let translatedPoint = {
+	var translatedPoint = {
 		X: point.X - center.X,
 		Y: point.Y - center.Y
 	}
 	// rotate
-	let rotatedPoint = {
+	var rotatedPoint = {
 		X: translatedPoint.X*Math.cos(angle) - translatedPoint.Y*Math.sin(angle),
 		Y: translatedPoint.X*Math.sin(angle) + translatedPoint.Y*Math.cos(angle)
 	}
@@ -56,39 +56,39 @@ function rotatePoint(point, angle, center) {
 function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFractalFunction) {
 
 	// distance (px) between fractals and side of canvas
-	const buffer_size = 10;
+	var buffer_size = 10;
 
 	var canvasWidth = paper.getSize().width;
 	var canvasHeight = paper.getSize().height;
 
 	// draw a bunch of fractals in a row, with increasing level
-	let level = 1;
-	let levelIncrement = Math.round(maxLevel/fractalCount);
+	var level = 1;
+	var levelIncrement = Math.round(maxLevel/fractalCount);
 
 	// var fractalSize = 300; // deal with mobile sizing later
 	var fractalSize = (canvasWidth - (2*buffer_size))/fractalCount;
-	let fractals = {};
-	let centerPoint = {
+	var fractals = {};
+	var centerPoint = {
 		X: buffer_size + (1/2)*fractalSize,
 		Y: canvasHeight/2
 	}
-	let orientation = 1;
+	var orientation = 1;
 	for (var i=1; i<=fractalCount; i++) {
 
-		let options = {
+		var options = {
 			level: level,
 			orientation: orientation,
 		}
-		let base = baseFractalFunction(centerPoint, fractalSize, options);
+		var base = baseFractalFunction(centerPoint, fractalSize, options);
 		fractals[level] = fractalFunction(centerPoint, fractalSize, options);
 		// draw base in lighter stroke color
-		let pathBelow = paper.path(base);
+		var pathBelow = paper.path(base);
 		pathBelow.attr({'stroke': LIGHT_GRAY});
 		// draw with animation on top of base in darker stroke color
 		draw(paper, fractals[level]);
 
 		// Place text: '_ levels' above or below the fractal drawn
-		let levelsTextString = String(level) + ' levels';
+		var levelsTextString = String(level) + ' levels';
 		paper.text(centerPoint.X, centerPoint.Y + fractalSize/2 + 5, levelsTextString);
 
 		// increment center point along x-axis
@@ -116,7 +116,7 @@ function draw(paper, pathList, interval) {
 
 	if (pathList.length <= 0) return;
 
-	let currentPath = paper.path(pathList[0]);
+	var currentPath = paper.path(pathList[0]);
 	currentPath.attr({'stroke': PURPLE, 'stroke-width': 2});
 	drawNextPart(pathList, currentPath, 1, interval);
 	return currentPath;
@@ -134,7 +134,7 @@ Recursive subroutine for draw. Animates drawing segments of path
 function drawNextPart(pathList, currentPath, index, interval) {
 	if (index > pathList.length) return;
 
-	let nextPart = pathList.slice(0, index + 1);
+	var nextPart = pathList.slice(0, index + 1);
 	currentPath.animate({path: nextPart}, interval, function() {
 		drawNextPart(pathList, currentPath, index + 1, interval);
 	});
@@ -165,10 +165,10 @@ function getNextPoint(fromPoint, distance, angle) {
 		console.error('getNextPoint called with bad angle', angle);
 		return;
 	}
-	const fromX = fromPoint.X;
-	const fromY = fromPoint.Y;
+	var fromX = fromPoint.X;
+	var fromY = fromPoint.Y;
 
-	const toPoint = {
+	var toPoint = {
 		X: (fromX + distance*Math.cos(angle)),
 		Y: (fromY + distance*Math.sin(angle)),
 	}

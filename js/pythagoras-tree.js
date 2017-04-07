@@ -1,4 +1,4 @@
-// 'use strict'; // commented out in prod to work nicely with safari
+'use strict';
 /***
 Used to draw Pythagoras Tree as a Raphael JS path.
 
@@ -20,12 +20,12 @@ current square's 2 child nodes (squares).
 @returns {array} pathList as array of RaphaelJS paths to draw
 */
 function getPythagorasTree(origin, sideLength, options) {
-	let pathList = []; // what will be returned
+	var pathList = []; // what will be returned
 
 	options = options || {};
-	let levels = options.levels || 4;
-	let orientation = options.orientation || (-1)*RADIANS_90_DEGREES;
-	let edgePathFunction = options.edgePathFunction || getStraightPath;
+	var levels = options.levels || 4;
+	var orientation = options.orientation || (-1)*RADIANS_90_DEGREES;
+	var edgePathFunction = options.edgePathFunction || getStraightPath;
 
 	pythagorasTreeRoutine(pathList, origin, sideLength, levels, orientation, edgePathFunction);
 	
@@ -51,7 +51,7 @@ function pythagorasTreeRoutine(pathList, centerPoint, sideLength, level, orienta
 	// add shape around this centerPoint
 	// gets path of shape as list.  Each element of this list should be appended to
 	// the pathList
-	let shapePathList = pythagorasTreeSquare(centerPoint, orientation, sideLength, edgePathFunction);
+	var shapePathList = pythagorasTreeSquare(centerPoint, orientation, sideLength, edgePathFunction);
 	for (var i=0; i<shapePathList.length; i++) {
 		pathList.push(shapePathList[i]);
 	}
@@ -60,16 +60,16 @@ function pythagorasTreeRoutine(pathList, centerPoint, sideLength, level, orienta
 	// and right child curving in the +45 degree direction from this block
 
 	// scale down sideLength by factor of (1/2)*sqrt(2) for children
-	let childSideLength = (1/2)*Math.sqrt(2)*sideLength;
+	var childSideLength = (1/2)*Math.sqrt(2)*sideLength;
 
-	let leftChildOrientation = orientation - RADIANS_45_DEGREES;
-	let rightChildOrientation = orientation + RADIANS_45_DEGREES;
+	var leftChildOrientation = orientation - RADIANS_45_DEGREES;
+	var rightChildOrientation = orientation + RADIANS_45_DEGREES;
 
 	// TODO: figure out how to do this the right way
 	// Without this multiplier the fractals do not perfectly line up and touch
-	let tightener = 0.96;
+	var tightener = 0.96;
 
-	let leftChildCenterPoint = {
+	var leftChildCenterPoint = {
 		X: centerPoint.X + (
 			(1/2)*tightener*sideLength*Math.cos(orientation)
 			+
@@ -81,7 +81,7 @@ function pythagorasTreeRoutine(pathList, centerPoint, sideLength, level, orienta
 			(3/4)*tightener*sideLength*Math.sin(leftChildOrientation)
 		)
 	}
-	let rightChildCenterPoint = {
+	var rightChildCenterPoint = {
 		X: centerPoint.X + (
 			(1/2)*tightener*sideLength*Math.cos(orientation)
 			+
@@ -114,21 +114,21 @@ Draws square by taking centerPoint and starting at "bottom left" corner where
 */
 function pythagorasTreeSquare(centerPoint, orientation, sideLength, edgePathFunction) {
 	// compute the corner points as if square was oriented up and then rotate them
-	const diagonal = sideLength*Math.sqrt(2);
+	var diagonal = sideLength*Math.sqrt(2);
 
-	let bottomLeftPoint = {
+	var bottomLeftPoint = {
 		X: centerPoint.X - (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
 		Y: centerPoint.Y + (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
 	};
-	let bottomRightPoint = {
+	var bottomRightPoint = {
 		X: centerPoint.X + (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
 		Y: centerPoint.Y + (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
 	};
-	let topLeftPoint = {
+	var topLeftPoint = {
 		X: centerPoint.X - (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
 		Y: centerPoint.Y - (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
 	};
-	let topRightPoint = {
+	var topRightPoint = {
 		X: centerPoint.X + (1/2)*diagonal*Math.cos(RADIANS_45_DEGREES),
 		Y: centerPoint.Y - (1/2)*diagonal*Math.sin(RADIANS_45_DEGREES)
 	};
@@ -169,7 +169,7 @@ function getStraightPath(fromPoint, toPoint) {
 
 /* Function to draw each edge with a slightly different curve. */
 function getCatmullRomPathRandom(fromPoint, toPoint, centerPoint) {
-	let multiplier = Math.random();
+	var multiplier = Math.random();
 	return getCatmullRomPath(fromPoint, toPoint, centerPoint, multiplier);
 }
 
@@ -177,8 +177,8 @@ function getCatmullRomPathRandom(fromPoint, toPoint, centerPoint) {
 function getCatmullRomPath(fromPoint, toPoint, centerPoint, multiplier) {
 	multiplier = multiplier || 3/4;
 
-	let differenceX = (centerPoint.X - fromPoint.X);
-	let differenceY = (centerPoint.Y - fromPoint.Y);
+	var differenceX = (centerPoint.X - fromPoint.X);
+	var differenceY = (centerPoint.Y - fromPoint.Y);
 
 	return ["R", fromPoint.X + multiplier*differenceX, fromPoint.Y + multiplier*differenceY, toPoint.X, toPoint.Y];
 }
@@ -196,13 +196,13 @@ function drawPythagorasTree(paper, pathList, animationInterval, drawCallback) {
 	drawCallback = drawCallback || function(level) {};
 
 	// Initialize the start and end values to look at entire pathList
-	let start = 0;
-	let end = pathList.length;
+	var start = 0;
+	var end = pathList.length;
 	// There are this many path pieces that compose a square of the tree
 	// These pieces should be drawn together
-	let jump = 6;
+	var jump = 6;
 	// Initially, draw blocks at level=1
-	let initialLevel = 1;
+	var initialLevel = 1;
 	drawBranchedPathList(paper, pathList, start, end, jump, animationInterval, drawCallback, initialLevel);
 }
 
@@ -216,7 +216,7 @@ function drawBranchedPathList(paper, pathList, start, end, jump, animationInterv
 	// announce we are drawing something at this level
 	drawCallback(level);
 
-	let nextPart = pathList.slice(start, start + jump);
+	var nextPart = pathList.slice(start, start + jump);
 	// animates out from first point
 	var animatePoint = paper.path(nextPart[0]);
 	// color the path purple
@@ -226,8 +226,8 @@ function drawBranchedPathList(paper, pathList, start, end, jump, animationInterv
 		// recursively call to draw 2 child blocks at next level
 
 		// compute indices of child blocks in the pathList
-		let nextIndex1 = start + jump;
-		let nextIndex2 = Math.floor(start + end)/2;
+		var nextIndex1 = start + jump;
+		var nextIndex2 = Math.floor(start + end)/2;
 		nextIndex2 += (nextIndex2 % jump);
 
 		drawBranchedPathList(paper, pathList, nextIndex1, nextIndex2, jump, animationInterval, drawCallback, level + 1);

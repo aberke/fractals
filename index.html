@@ -132,26 +132,26 @@
 </footer>
 
 <script>
-// 'use strict'; // commented out in prod to work nicely with safari
+'use strict';
 
 
 // draw a row of triangles
 
 // how many drawings in a row
-const TRIANGLE_ROW_COUNT = 5;
+var TRIANGLE_ROW_COUNT = 5;
 
-const TRIANGLE_CANVAS_HEIGHT = 300; // deal with mobile case later
+var TRIANGLE_CANVAS_HEIGHT = 300; // deal with mobile case later
 
 var paper1 = new Raphael("canvas-1", "100%", TRIANGLE_CANVAS_HEIGHT);
 var paper2 = new Raphael("canvas-2", "100%", TRIANGLE_CANVAS_HEIGHT);
 
-let maxLevel = 6;
-let baseFractalFunction = getSierpinskiTriangle;
+var maxLevel = 6;
+var baseFractalFunction = getSierpinskiTriangle;
 
 // draw the Sierpinski Triangle with a 'redraw button'
 var redrawSierpinskiTriangleFractals = function() {
 	paper1.clear();
-	let sierpinskiTriangleFractals = drawFractalRow(paper1, TRIANGLE_ROW_COUNT, maxLevel, getSierpinskiTriangle, baseFractalFunction);
+	var sierpinskiTriangleFractals = drawFractalRow(paper1, TRIANGLE_ROW_COUNT, maxLevel, getSierpinskiTriangle, baseFractalFunction);
 }
 var redrawSierpinskiTriangleFractalsButton = document.getElementById("sierpinski-triangle-redraw-btn");
 redrawSierpinskiTriangleFractalsButton.onclick = redrawSierpinskiTriangleFractals;
@@ -161,7 +161,7 @@ redrawSierpinskiTriangleFractals();
 // draw the arrow head curves with a 'redraw' button
 var redrawSierpinskiArrowheadCurveFractals = function() {
 	paper2.clear();
-	let sierpinskiArrowheadCurveFractals = drawFractalRow(paper2, TRIANGLE_ROW_COUNT, 4, getSierpinskiArrowheadCurve, baseFractalFunction);
+	var sierpinskiArrowheadCurveFractals = drawFractalRow(paper2, TRIANGLE_ROW_COUNT, 4, getSierpinskiArrowheadCurve, baseFractalFunction);
 }
 var redrawSierpinskiArrowheadCurveFractalsButton = document.getElementById("sierpinski-arrowhead-curve-redraw-btn");
 redrawSierpinskiArrowheadCurveFractalsButton.onclick = redrawSierpinskiArrowheadCurveFractals;
@@ -171,24 +171,24 @@ redrawSierpinskiArrowheadCurveFractals();
 
 // draw one Pythagoras Tree
 function handlePythagorasCanvas(containerElt, edgePathFunction) {
-	let levelTextElt = containerElt.getElementsByClassName("level-text")[0];
-	let redrawButtonElt = containerElt.getElementsByClassName("redraw-btn")[0];
+	var levelTextElt = containerElt.getElementsByClassName("level-text")[0];
+	var redrawButtonElt = containerElt.getElementsByClassName("redraw-btn")[0];
 
 	var paper = new Raphael(containerElt, "100%", 400);
-	let paperWidth = paper.getSize().width;
-	let paperHeight = paper.getSize().height;
+	var paperWidth = paper.getSize().width;
+	var paperHeight = paper.getSize().height;
 
-	let maxLevel = 7;
-	let sideLength = (5/3)*Math.min(paperWidth, paperHeight)/maxLevel;
-	let centerPoint = {X: paperWidth/2, Y: paperHeight - (1/2)*sideLength};
+	var maxLevel = 7;
+	var sideLength = (5/3)*Math.min(paperWidth, paperHeight)/maxLevel;
+	var centerPoint = {X: paperWidth/2, Y: paperHeight - (1/2)*sideLength};
 
-	let pythagorasTreePathList = getPythagorasTree(centerPoint, sideLength, {
+	var pythagorasTreePathList = getPythagorasTree(centerPoint, sideLength, {
 		levels: maxLevel,
 		edgePathFunction: edgePathFunction,
 	});
 
 	// Update inner text of this element as the level/level being drawn grows
-	let currentDrawLevel = 0;
+	var currentDrawLevel = 0;
 	function drawPythagorasTreeCallback(level) {
 		if (currentDrawLevel < level) {
 			currentDrawLevel = level;
@@ -206,22 +206,22 @@ function handlePythagorasCanvas(containerElt, edgePathFunction) {
 	redrawPythagorasTree();
 }
 
-let containerElt3 = document.getElementById("canvas-3");
+var containerElt3 = document.getElementById("canvas-3");
 handlePythagorasCanvas(containerElt3);
 
 
 // Draw a row of Pythagoras Trees
 function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
 	// draw trees of this level
-	let maxLevel = 7;
+	var maxLevel = 7;
 
-	let paperWidth = paper.getSize().width;
-	let paperHeight = paper.getSize().height;
+	var paperWidth = paper.getSize().width;
+	var paperHeight = paper.getSize().height;
 
-	let treeCount = edgePathFunctions.length;
+	var treeCount = edgePathFunctions.length;
 
-	let treeSize = paperWidth/treeCount;
-	let sideLength = treeSize/6;
+	var treeSize = paperWidth/treeCount;
+	var sideLength = treeSize/6;
 
 
 	for (var i=0; i < edgePathFunctions.length; i++) {
@@ -230,7 +230,7 @@ function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
 
 		var centerPoint = {X: centerPointX, Y: centerPointY};
 
-		let pythagorasTreePathList = getPythagorasTree(centerPoint, sideLength, {
+		var pythagorasTreePathList = getPythagorasTree(centerPoint, sideLength, {
 			levels: maxLevel,
 			edgePathFunction: edgePathFunctions[i],
 		});
@@ -238,22 +238,22 @@ function drawPythagorasTreeMultiple(paper, edgePathFunctions, drawCallback) {
 	}
 }
 
-let containerElt4 = document.getElementById("canvas-4");
-let levelTextElt4 = containerElt4.getElementsByClassName("level-text")[0];
-let redrawButtonElt4 = containerElt4.getElementsByClassName("redraw-btn")[0];
+var containerElt4 = document.getElementById("canvas-4");
+var levelTextElt4 = containerElt4.getElementsByClassName("level-text")[0];
+var redrawButtonElt4 = containerElt4.getElementsByClassName("redraw-btn")[0];
 
 var paper4 = new Raphael(containerElt4, "100%", 250);
 
 function redrawPythagorasTreeMultiple() {
 	paper4.clear();
-	let randomMultiplier = Math.random();
-	let randomEdgePathFunction = function(fromPoint, toPoint, centerPoint) {
+	var randomMultiplier = Math.random();
+	var randomEdgePathFunction = function(fromPoint, toPoint, centerPoint) {
 		return getCatmullRomPath(fromPoint, toPoint, centerPoint, randomMultiplier);
 	};
-	let edgePathFunctions = [getEllipsePath, getCurvedPath, randomEdgePathFunction];
+	var edgePathFunctions = [getEllipsePath, getCurvedPath, randomEdgePathFunction];
 
 	// update level text element as the level increments	
-	let currentDrawLevel = 0;
+	var currentDrawLevel = 0;
 	function drawPythagorasTreeCallback(level) {
 		if (currentDrawLevel < level) {
 			currentDrawLevel = level;
