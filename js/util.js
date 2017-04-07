@@ -39,12 +39,12 @@ function rotatePoint(point, angle, center) {
 	var translatedPoint = {
 		X: point.X - center.X,
 		Y: point.Y - center.Y
-	}
+	};
 	// rotate
 	var rotatedPoint = {
 		X: translatedPoint.X*Math.cos(angle) - translatedPoint.Y*Math.sin(angle),
 		Y: translatedPoint.X*Math.sin(angle) + translatedPoint.Y*Math.cos(angle)
-	}
+	};
 	// translate it back
 	return {
 		X: rotatedPoint.X + center.X,
@@ -71,14 +71,14 @@ function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFrac
 	var centerPoint = {
 		X: buffer_size + (1/2)*fractalSize,
 		Y: canvasHeight/2
-	}
+	};
 	var orientation = 1;
 	for (var i=1; i<=fractalCount; i++) {
 
 		var options = {
 			level: level,
 			orientation: orientation,
-		}
+		};
 		var base = baseFractalFunction(centerPoint, fractalSize, options);
 		fractals[level] = fractalFunction(centerPoint, fractalSize, options);
 		// draw base in lighter stroke color
@@ -171,7 +171,7 @@ function getNextPoint(fromPoint, distance, angle) {
 	var toPoint = {
 		X: (fromX + distance*Math.cos(angle)),
 		Y: (fromY + distance*Math.sin(angle)),
-	}
+	};
 
 	return toPoint;
 }
