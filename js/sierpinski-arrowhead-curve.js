@@ -1,4 +1,4 @@
-// 'use strict'; // commented out in prod to work nicely with safari
+'use strict';
 /*************************************
 Generates a Sierpiński arrowhead curve as a Raphael JS path.
 
@@ -32,28 +32,28 @@ function getSierpinskiArrowheadCurve(centerPoint, sideLength, options) {
 	options = options || {};
 
 	// Get or set default level.  level represents the depth of recursion
-	let level = options.level || 3;
+	var level = options.level || 3;
 
 	// Get or set default orientation. -1 => point downwards, +1 => point upwards
-	let orientation = options.orientation;
+	var orientation = options.orientation;
 	if (!(orientation == -1 || orientation == 1))
 		orientation = 1;
 
 	// start at bottom left corner
-	let height = getTriangleHeight((2*Math.PI)/6, sideLength);
-	let startPoint = {
+	var height = getTriangleHeight((2*Math.PI)/6, sideLength);
+	var startPoint = {
 		X: centerPoint.X - (1/2)*sideLength,
 		Y: centerPoint.Y + (orientation)*(1/2)*height,
 	}
 
 	// initialize pathList with only startPoint
 	// this pathList will be appended to throughout the algorithm
-	let pathList = [
+	var pathList = [
 		["M", startPoint.X, startPoint.Y]
 	];
 
 	// orient Sierpiński arrowhead curve
-	let angle = 0;
+	var angle = 0;
 	if ((level % 2) == 0) { // level is even
 		arrowheadCurve(level, pathList, startPoint, sideLength, angle, 1, orientation);
 	} else { // level is odd
@@ -79,11 +79,11 @@ Recursive subroutine to construct the Sierpiński arrowhead curve
 */
 function arrowheadCurve(level, pathList, fromPoint, sideLength, angle, angleChange, orientation) {
 	// last is the most current point and angle in path
-	let last;
+	var last;
 
 	// at level 0: at bottom of recursion: draw next part of path
 	if (level == 0) {
-		let nextPoint = getNextPoint(fromPoint, sideLength, (orientation)*angle);
+		var nextPoint = getNextPoint(fromPoint, sideLength, (orientation)*angle);
 		// appends to pathList
 		pathList = addLine(pathList, nextPoint);
 		last = {

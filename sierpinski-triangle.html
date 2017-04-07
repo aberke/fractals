@@ -34,32 +34,32 @@
 
 
 <script>
-// 'use strict'; // commented out in prod to work nicely with safari
+'use strict';
 
 
-let paper1 = new Raphael("canvas-1", "%100", 600);
-let paper2 = new Raphael("canvas-2", "%100", 600);
-let paper3 = new Raphael("canvas-3", "%100", 600);
+var paper1 = new Raphael("canvas-1", "%100", 600);
+var paper2 = new Raphael("canvas-2", "%100", 600);
+var paper3 = new Raphael("canvas-3", "%100", 600);
 
 
 // draw the rotated triangles on paper1
-let paper1CenterPoint = getCanvasCenterPoint(paper1);
+var paper1CenterPoint = getCanvasCenterPoint(paper1);
 drawSierpinskiTriangleFlower(paper1, paper1CenterPoint, paper1.getSize().height, 5).attr({stroke: PURPLE});
 
 // draw row of triangles on paper2
-let maxLevel = 6;
-let baseFractalFunction = getSierpinskiTriangle;
-let triangleRowCount = 6;
-let triangleRow = drawFractalRow(paper2, triangleRowCount, maxLevel, getSierpinskiTriangle, baseFractalFunction);
+var maxLevel = 6;
+var baseFractalFunction = getSierpinskiTriangle;
+var triangleRowCount = 6;
+var triangleRow = drawFractalRow(paper2, triangleRowCount, maxLevel, getSierpinskiTriangle, baseFractalFunction);
 
 // draw one very big triangle on paper3
 paper3.setSize(paper3.getSize().width, paper3.getSize().height*2);
-let sideLength3 = Math.min(paper3.getSize().height/2);
-let paper3CenterPoint = getCanvasCenterPoint(paper1);
-let trianglePathList3 = getSierpinskiTriangle(paper3CenterPoint, sideLength3, {
+var sideLength3 = Math.min(paper3.getSize().height/2);
+var paper3CenterPoint = getCanvasCenterPoint(paper1);
+var trianglePathList3 = getSierpinskiTriangle(paper3CenterPoint, sideLength3, {
 	level: 8,
 });
-let trianglePath3 = paper3.path(trianglePathList3).attr({stroke: PURPLE});
+var trianglePath3 = paper3.path(trianglePathList3).attr({stroke: PURPLE});
 
 </script>
 
