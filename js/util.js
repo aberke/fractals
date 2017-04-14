@@ -107,17 +107,27 @@ Animates drawing the path on the Paper by drawing path by path
 
 @param {Paper} paper on which to draw
 @param {array} pathList of segments to draw
-@param {number} interval or time it takes to draw a segment
+@param {Object} options
+	{number} options.interval: time it takes to draw a segment
+	{string} options.stroke as the color of the stroke that should be draw
+	{number} options['stroke-width']
+
 @returns {Path object} path drawn 
 */
-function drawPathByPath(paper, pathList, interval) {
+function drawPathByPath(paper, pathList, options) {
+	// set default options
+	options = options || {};
+
 	// set default interval
-	interval = interval || 300;
+	var interval = options.interval || 300;
 
 	if (pathList.length <= 0) return;
 
 	var currentPath = paper.path(pathList[0]);
-	currentPath.attr({'stroke': PURPLE, 'stroke-width': 2});
+	currentPath.attr({
+		'stroke': options.stroke || PURPLE,
+		'stroke-width': options['stroke-width'] || 2
+	});
 	drawNextPart(pathList, currentPath, 1, interval);
 	return currentPath;
 }
