@@ -85,7 +85,7 @@ function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFrac
 		var pathBelow = paper.path(base);
 		pathBelow.attr({'stroke': LIGHT_GRAY});
 		// draw with animation on top of base in darker stroke color
-		draw(paper, fractals[level]);
+		drawPathByPath(paper, fractals[level]);
 
 		// Place text: '_ levels' above or below the fractal drawn
 		var levelsTextString = String(level) + ' levels';
@@ -103,14 +103,14 @@ function drawFractalRow(paper, fractalCount, maxLevel, fractalFunction, baseFrac
 
 
 /**
-Animates drawing the path on the Paper
+Animates drawing the path on the Paper by drawing path by path
 
 @param {Paper} paper on which to draw
 @param {array} pathList of segments to draw
 @param {number} interval or time it takes to draw a segment
 @returns {Path object} path drawn 
 */
-function draw(paper, pathList, interval) {
+function drawPathByPath(paper, pathList, interval) {
 	// set default interval
 	interval = interval || 300;
 
