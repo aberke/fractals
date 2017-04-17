@@ -6,7 +6,6 @@
   "devDependencies": {
     "babel-preset-env": "^1.4.0",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
     "gulp-jshint": "^2.0.4",
     "jshint": "^2.9.4"
   },
