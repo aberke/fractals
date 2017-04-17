@@ -7,10 +7,11 @@
 
 	<link rel="shortcut icon" href="img/sierpinski-triangle.png" type="image/x-icon">
 
-	<script type="text/javascript" src="js/raphael/raphael.js"></script>
+	<!-- vendor assets -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
 
-	<script type="text/javascript" src="js/util.js"></script>
-	<script type="text/javascript" src="js/sierpinski-triangle.js"></script>
+	<script type="text/javascript" src="dist/util.js"></script>
+	<script type="text/javascript" src="dist/sierpinski-triangle.js"></script>
 
 
 	<link rel="stylesheet" href="css/fractals.css">
@@ -43,23 +44,23 @@ var paper3 = new Raphael("canvas-3", "%100", 600);
 
 
 // draw the rotated triangles on paper1
-var paper1CenterPoint = getCanvasCenterPoint(paper1);
-drawSierpinskiTriangleFlower(paper1, paper1CenterPoint, paper1.getSize().height, 5).attr({stroke: PURPLE});
+var paper1CenterPoint = fractalsUtil.getCanvasCenterPoint(paper1);
+sierpinskiTriangle.drawSierpinskiTriangleFlower(paper1, paper1CenterPoint, paper1.getSize().height, 5).attr({stroke: fractalsUtil.PURPLE});
 
 // draw row of triangles on paper2
 var maxLevel = 6;
-var baseFractalFunction = getSierpinskiTriangle;
+var baseFractalFunction = sierpinskiTriangle.getSierpinskiTriangle;
 var triangleRowCount = 6;
-var triangleRow = drawFractalRow(paper2, triangleRowCount, maxLevel, getSierpinskiTriangle, baseFractalFunction);
+var triangleRow = fractalsUtil.drawFractalRow(paper2, triangleRowCount, maxLevel, sierpinskiTriangle.getSierpinskiTriangle, baseFractalFunction);
 
 // draw one very big triangle on paper3
 paper3.setSize(paper3.getSize().width, paper3.getSize().height*2);
 var sideLength3 = Math.min(paper3.getSize().height/2);
-var paper3CenterPoint = getCanvasCenterPoint(paper1);
-var trianglePathList3 = getSierpinskiTriangle(paper3CenterPoint, sideLength3, {
+var paper3CenterPoint = fractalsUtil.getCanvasCenterPoint(paper1);
+var trianglePathList3 = sierpinskiTriangle.getSierpinskiTriangle(paper3CenterPoint, sideLength3, {
 	level: 8,
 });
-var trianglePath3 = paper3.path(trianglePathList3).attr({stroke: PURPLE});
+var trianglePath3 = paper3.path(trianglePathList3).attr({stroke: fractalsUtil.PURPLE});
 
 </script>
 
