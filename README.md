@@ -21,7 +21,7 @@ I love fractals.  I also love math and am working on a coloring book that teache
 
 
 
-#### Development
+### Development
 
 Project JS files are built to `/dist` with gulp and served out of `/dist`
 
@@ -30,8 +30,8 @@ Setting up development:
 - Clone repo
 - Install dev dependencies `$ npm install`
 
-Build:
+Build with gulp:
 - `$ gulp build`
 
-Lint JS:
+Lint Javascript with gulp:
 - `$ gulp lint`
