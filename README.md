@@ -17,7 +17,7 @@ Fractals drawn using Raphael JS.
 
 ### Why?
 
-I love fractals.  I also love math and am working on a coloring book that teaches its audience <a target="_blank" href="https://en.wikipedia.org/wiki/Group_theory">group theory</a>, and needed to draw some fractals in javascript.  It was harder than I thought, and led down a rabbit hole that seemed worthy of a webpage.  I wanted to be able to share the javascript code I wrote so that others did not later have the same troubles as I.
+I love fractals.  I also love math and am working on a <a target="_blank" href="https://github.com/aberke/coloring-book">coloring book (github.com/aberke/coloring-book)</a> that teaches its audience <a target="_blank" href="https://en.wikipedia.org/wiki/Group_theory">group theory</a>, and needed to draw some fractals in javascript.  It was harder than I thought, and led down a rabbit hole that seemed worthy of a webpage.  I wanted to be able to share the javascript code I wrote so that others did not later have the same troubles as I.
 
 
 ### Development
